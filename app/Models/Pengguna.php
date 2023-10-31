@@ -3,20 +3,22 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject; // Use the custom namespace
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-class Pengguna extends Model implements Authenticatable
+
+class Pengguna extends Model implements Authenticatable, JWTSubject
 {
-    use HasFactory, Notifiable, HasApiTokens; // Make sure to include HasApiTokens
+    use HasFactory, Notifiable, HasApiTokens;
+
     protected $table = 'pengguna';
-
     protected $fillable = ['email', 'password', 'nomorinduk_pengguna'];
+    protected $primaryKey = 'id_pengguna';
 
-    protected $primaryKey = 'id_pengguna'; // Specify the primary key column name
-
-    // Add the remember_token column to your table if not already added
+    // Add the remember_token property to your model
+    protected $remember_token;
 
     /**
      * Get the password for the user.
@@ -48,32 +50,48 @@ class Pengguna extends Model implements Authenticatable
         return 'id_pengguna'; // Replace with the actual column name for the user identifier
     }
 
-    // Implement the methods related to "remember me" functionality
-
+    /**
+     * Get the "remember me" token for the user.
+     *
+     * @return string|null
+     */
     public function getRememberToken()
     {
         return $this->remember_token;
     }
 
+    /**
+     * Set the "remember me" token for the user.
+     *
+     * @param string $value
+     */
     public function setRememberToken($value)
     {
         $this->remember_token = $value;
     }
-    public function jurusan()
-{
-    return $this->belongsTo(Jurusan::class, 'id_jurusan'); // Specify the foreign key column
-}
 
-public function jabatan()
-{
-    return $this->belongsTo(Jabatan::class, 'id_jabatan'); // Specify the foreign key column
-}
-
-    
+    /**
+     * Get the column name for the "remember me" token.
+     *
+     * @return string
+     */
     public function getRememberTokenName()
     {
         return 'remember_token';
     }
 
-    // Rest of your model code...
+    /**
+     * Implement methods for the JWTSubject interface
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+    // Define relationships and other model code...
 }

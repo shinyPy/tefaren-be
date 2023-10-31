@@ -4,8 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Models\Pengguna;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class AuthenticateUser
 {
@@ -22,27 +22,26 @@ class AuthenticateUser
 
         $pengguna = Pengguna::where($field, $credentials[$field])->first();
 
-        if (!$pengguna || !Hash::check($credentials['password'], $pengguna->password)) {
-            return response()->json(["message" => "Email or password incorrect"], 401);
+        if (!$pengguna || !\Hash::check($credentials['password'], $pengguna->password)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Email atau Password Anda salah'
+            ], 401);
         }
 
-        // Retrieve the user's role (level_pengguna)
-        $userRole = $pengguna->level_pengguna;
-        $userName = $pengguna->nama_pengguna;
-        // Generate and store the token
-        $token = $this->generateToken($pengguna);
+        // Use Laravel Passport for token authentication
+        if (!$token = auth()->guard('api')->attempt($credentials)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Email atau Password Anda salah'
+            ], 401);
+        }
 
-        $request->attributes->add(['pengguna' => $pengguna, 'token' => $token, 'user_role' => $userRole, 'nama_pengguna' => $userName]);
-
-        return $next($request);
-    }
-
-    private function generateToken($pengguna)
-    {
-        $token = Str::random(60);
-    
-        $pengguna->update(['api_token' => hash('sha256', $token)]);
-    
-        return $token;
+        // If authentication is successful
+        return response()->json([
+            'success' => true,
+            'pengguna' => auth()->guard('api')->user(),
+            'token' => $token,
+        ], 200);
     }
 }

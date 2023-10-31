@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'api',
         'passwords' => 'users',
     ],
 
@@ -35,11 +35,6 @@ return [
     |
     */
     'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class,
-        ],
-        
         'pengguna' => [
             'driver' => 'eloquent',
             'model' => App\Models\Pengguna::class,
@@ -47,8 +42,8 @@ return [
     ],
     
     'guards' => [
-        'web' => [
-            'driver' => 'session',
+        'api' => [
+            'driver' => 'jwt',
             'provider' => 'pengguna', // Use the 'pengguna' provider for the 'web' guard
         ],
         
