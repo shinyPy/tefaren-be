@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->string('password');
             $table->timestamps();
 
-
             $table->foreign('id_jurusan')->references('id_jurusan')->on('jurusan');
             $table->foreign('id_jabatan')->references('id_jabatan')->on('jabatan');
         });

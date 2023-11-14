@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('barang', function (Blueprint $table) {
             $table->id('nomor_barang'); // Use id() method to create auto-incrementing primary key
+            $table->unsignedBigInteger('id_kategori')->nullable();
             $table->string('kode_barang', 25)->index('kode_barang');
             $table->string('nama_barang', 100)->index('nama_barang');
             $table->enum('ketersediaan_barang', ['Tersedia','Dipinjam','Pemeliharaan','Dihapuskan']);
             $table->enum('status_barang', ['baik','rusak']);
             $table->string('gambar_barang', 255);
+
+            $table->foreign('id_kategori')->references('id_kategori')->on('kategori_barang');
 
             $table->timestamps();
 
