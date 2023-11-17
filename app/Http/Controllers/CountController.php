@@ -72,6 +72,17 @@ public function countTipeBarang()
     return response()->json(['total_baik' => $totalTersedia, 'total_rusak' => $totalDipinjam, 'total_pemeliharaan' => $totalPemeliharaan,'total_dihapuskan' => $totalDihapuskan]);
 }
 
+public function countBarangByKategori()
+{
+    // Group Barang entries by id_kategori, get the count for each id_kategori, and join with kategori_barang
+    $counts = Barang::join('kategori_barang', 'barang.id_kategori', '=', 'kategori_barang.id_kategori')
+        ->groupBy('barang.id_kategori', 'kategori_barang.kategori')
+        ->selectRaw('barang.id_kategori, kategori_barang.kategori, count(*) as total')
+        ->get();
+
+    return response()->json($counts);
+}
+
     public function countUsersByJurusan()
     {
         // Join the 'pengguna' and 'jurusan' tables based on the 'id_jurusan' foreign key

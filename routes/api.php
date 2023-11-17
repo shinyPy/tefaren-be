@@ -51,11 +51,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-Route::get('/barangShow', [BarangController::class, 'barangShow']);
-Route::post('/barangAdd', [BarangController::class, 'createOrUpdate']);
-Route::patch('/barangUpdate/{id}', [BarangController::class, 'createOrUpdate']);
-Route::delete('/barangDelete/{nomor_barang}', [BarangController::class, 'delete']);
-Route::post('/barangShowByNomor', [BarangController::class, 'fetchByNomor']);
+Route::get('/barangShow', [BarangController::class, 'index']);
+Route::post('/barangAdd', [BarangController::class, 'store']);
+Route::patch('/barangUpdate/{id}', [BarangController::class, 'update']);
+Route::delete('/barangDelete/{nomor_barang}', [BarangController::class, 'destroy']);
+Route::post('/barangShowByNomor', [BarangController::class, 'show']);
 
 Route::get('/jurusan-values', [EnumFetchControllers::class, 'getJurusanValues']);
 Route::get('/jabatan-values', [JabatanValuesControllers::class, 'getJabatanValues']);
@@ -70,5 +70,7 @@ Route::get('count-pengembalian', [CountController::class, 'countPengembalian']);
 Route::get('count-permohonan', [CountController::class, 'countPermohonan']);
 Route::get('count-tipepengguna', [CountController::class, 'countTipePengguna']);
 Route::get('count-tipebarang', [CountController::class, 'countTipeBarang']);
-    // Add more routes that should use the 'auth:api' middleware within this group.
+
+Route::get('/count-barangkategori', [CountController::class, 'countBarangByKategori']);
+
 });

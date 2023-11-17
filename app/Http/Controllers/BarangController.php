@@ -2,120 +2,124 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang;
+use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Barang;
-use Illuminate\Support\Facades\Storage; // Import the Storage facade
 
 class BarangController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function barangShow()
+    public function index()
     {
-        $barangList = Barang::all();
-    
-        // Add image URLs to each Barang record
-        foreach ($barangList as $barang) {
-            $barang->gambar_barang_url = $barang->gambar_barang ? Storage::url($barang->gambar_barang) : null;
+        $barang = Barang::with('kategori')->get();
+        return response()->json($barang);
+    }
+
+    public function show($id)
+    {
+        $barang = Barang::with('kategori')->find($id);
+
+        if (!$barang) {
+            return response()->json(["message" => "Barang not found"], 404);
         }
-    
-        return response()->json($barangList, 200);
+
+        return response()->json($barang);
     }
-    public function fetchByNomor(Request $request)
-    {
-        $nomor_barang = $request->input('nomor_barang');
-        $barang = Barang::where('nomor_barang', $nomor_barang)->get();
-        return response()->json($barang, 200);
-    }
-    
-    public function delete($nomor_barang)
-    {
-        try {
-            $barang = Barang::where('nomor_barang', $nomor_barang)->first(); // Find the record by 'nomor_barang'
-    
-            if (!$barang) {
-                return response()->json(["message" => "Barang not found"], 404);
-            }
-    
-            // Delete the record
-            $barang->delete();
-    
-            return response()->json(["message" => "Barang deleted successfully"], 200);
-        } catch (\Exception $e) {
-            return response()->json(["message" => "An error occurred"], 500);
-        }
-    }
-    
-    public function createOrUpdate(Request $request, $id = null)
+
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'kode_barang' => 'required|unique:barang,kode_barang,' . $id . ',nomor_barang|max:15',
-            'nama_barang' => 'required',
+            'kategori' => 'required|exists:kategori_barang,kategori',
+            'kode_barang' => 'required|unique:barang,kode_barang|max:25',
+            'nama_barang' => 'required|max:100',
             'ketersediaan_barang' => 'required|in:Tersedia,Dipinjam,Pemeliharaan,Dihapuskan',
             'status_barang' => 'required|in:baik,rusak',
+            'gambar_barang' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-    
-        // Check if gambar_barang is provided and meets image file validation rules
-        if ($request->hasFile('gambar_barang')) {
-            $validator->addRules([
-                'gambar_barang' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            ]);
-        }
-    
+
         if ($validator->fails()) {
             return response()->json(["message" => "Invalid field", "errors" => $validator->errors()], 422);
         }
-    
-        $barangData = [
+
+        $kategori = $request->input('kategori');
+        $id_kategori = Kategori::where('kategori', $kategori)->value('id_kategori');
+
+        $barang = new Barang([
+            'id_kategori' => $id_kategori,
             'kode_barang' => $request->kode_barang,
             'nama_barang' => $request->nama_barang,
             'ketersediaan_barang' => $request->ketersediaan_barang,
             'status_barang' => $request->status_barang,
-        ];
-    
-        // Check if gambar_barang is provided
-        if ($request->hasFile('gambar_barang')) {
-            // Handle the image upload and update the $barangData array
-            $imagePath = $request->file('gambar_barang')->store('barang_images', 'public');
-            $barangData['gambar_barang'] = $imagePath;
-        } elseif ($id === null) {
-            // If it's an insert operation and gambar_barang is not provided, set it to 'none'
-            $barangData['gambar_barang'] = 'none';
-        }
-    
-        if ($id === null) {
-            // Insert operation
-            $barang = new Barang($barangData);
-            $barang->save();
-        } else {
-            // Update operation
-            $existingBarang = Barang::find($id);
-    
-            if (!$existingBarang) {
-                return response()->json(["message" => "Barang not found"], 404);
-            }
-    
-            $existingBarang->update($barangData);
-        }
-    
-        return response()->json(["message" => "Barang added/updated successfully"], 201);
-    }
-    
+        ]);
 
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Barang $barang
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function destroy(Barang $barang)
+        // Handle gambar_barang only if it's provided
+        if ($request->hasFile('gambar_barang')) {
+            $imagePath = $request->file('gambar_barang')->store('barang_images', 'public');
+            $barang->gambar_barang = $imagePath;
+        } else {
+            // If gambar_barang is not provided, set it as "none"
+            $barang->gambar_barang = 'none';
+        }
+
+        $barang->save();
+
+        return response()->json(["message" => "Barang added successfully"], 201);
+    }
+
+    public function update(Request $request, $id)
     {
+        $barang = Barang::find($id);
+
+        if (!$barang) {
+            return response()->json(["message" => "Barang not found"], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'kategori' => 'required|exists:kategori_barang,kategori',
+            'kode_barang' => 'required|unique:barang,kode_barang,' . $id . ',nomor_barang|max:25',
+            'nama_barang' => 'required|max:100',
+            'ketersediaan_barang' => 'required|in:Tersedia,Dipinjam,Pemeliharaan,Dihapuskan',
+            'status_barang' => 'required|in:baik,rusak',
+            'gambar_barang' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(["message" => "Invalid field", "errors" => $validator->errors()], 422);
+        }
+
+        // Handle image update if a new image is provided
+        if ($request->hasFile('gambar_barang')) {
+            $imagePath = $request->file('gambar_barang')->store('barang_images', 'public');
+            $barang->gambar_barang = $imagePath;
+        } else {
+            // If gambar_barang is not provided, set it as "none"
+            $barang->gambar_barang = 'none';
+        }
+
+        $kategori = $request->input('kategori');
+        $id_kategori = Kategori::where('kategori', $kategori)->value('id_kategori');
+
+        $barang->id_kategori = $id_kategori;
+        $barang->kode_barang = $request->kode_barang;
+        $barang->nama_barang = $request->nama_barang;
+        $barang->ketersediaan_barang = $request->ketersediaan_barang;
+        $barang->status_barang = $request->status_barang;
+
+        $barang->save();
+
+        return response()->json(["message" => "Barang updated successfully"]);
+    }
+
+    public function destroy($id)
+    {
+        $barang = Barang::find($id);
+
+        if (!$barang) {
+            return response()->json(["message" => "Barang not found"], 404);
+        }
+
         $barang->delete();
-        return response()->json(["message" => "Barang deleted successfully"], 200);
+
+        return response()->json(["message" => "Barang deleted successfully"]);
     }
 }

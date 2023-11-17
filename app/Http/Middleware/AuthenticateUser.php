@@ -22,7 +22,7 @@ class AuthenticateUser
 
         $pengguna = Pengguna::where($field, $credentials[$field])->first();
 
-        if (!$pengguna || !\Hash::check($credentials['password'], $pengguna->password)) {
+        if (!$pengguna || !Hash::check($credentials['password'], $pengguna->password)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Email atau Password Anda salah'
@@ -41,7 +41,7 @@ class AuthenticateUser
         return response()->json([
             'success' => true,
             'pengguna' => auth()->guard('api')->user(),
-            'token' => $token,
+            'accessToken' => $token,
         ], 200);
     }
 }
