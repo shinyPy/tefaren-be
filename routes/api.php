@@ -47,7 +47,8 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-
+Route::get('/jurusan-values', [EnumFetchControllers::class, 'getJurusanValues']);
+Route::get('/jabatan-values', [JabatanValuesControllers::class, 'getJabatanValues']);
 Route::middleware('auth:api')->group(function () {
     // Define your routes here that should use the 'auth:api' middleware.
     Route::get('/user', function (Request $request) {
@@ -59,8 +60,7 @@ Route::patch('/barangUpdate/{id}', [BarangController::class, 'update']);
 Route::delete('/barangDelete/{nomor_barang}', [BarangController::class, 'destroy']);
 Route::post('/barangtest/{id}', [BarangController::class, 'show']);
 
-Route::get('/jurusan-values', [EnumFetchControllers::class, 'getJurusanValues']);
-Route::get('/jabatan-values', [JabatanValuesControllers::class, 'getJabatanValues']);
+
 
 Route::get('count-usersbyjurusan', [CountController::class, 'countUsersByJurusan']);
 Route::get('count-usersbyjabatan', [CountController::class, 'countUsersByJabatan']);

@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Jurusan extends Model
 {
     protected $table = 'jurusan'; // Specify the table name explicitly
+    protected $primaryKey = 'id_jurusan'; // Specify the custom primary key
 
     use HasFactory;
     public function pengguna()
-{
-    return $this->hasMany(Pengguna::class);
-}
+    {
+        return $this->hasMany(Pengguna::class, 'id_jabatan', 'id_jabatan');
+    }
 
 }
