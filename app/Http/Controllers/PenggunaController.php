@@ -10,17 +10,40 @@ use Illuminate\Support\Facades\Validator;
 class PenggunaController extends Controller
 {
     public function index()
-    {
-        $penggunaList = Pengguna::select([
-            'nomorinduk_pengguna',
-            'nama_pengguna',
-            'level_pengguna',
-            'id_jurusan',
-            'id_jabatan',
-        ])->get();
+{
+    $penggunaList = Pengguna::with(['jabatan:id_jabatan,jabatan', 'jurusan:id_jurusan,jurusan'])
+        ->select(['nomorinduk_pengguna', 'nama_pengguna', 'level_pengguna', 'id_jurusan', 'id_jabatan'])
+        ->get()
+        ->transform(function ($pengguna) {
+            $data = collect($pengguna)->except(['jabatan', 'jurusan']);
+
+            if ($pengguna->jabatan !== null) {
+                $jabatan = [
+                    'id_jabatan' => data_get($pengguna->jabatan, 'id_jabatan'),
+                    'jabatan' => data_get($pengguna->jabatan, 'jabatan'),
+                ];
+                $data->put('jabatan', array_filter($jabatan, fn ($value) => $value !== null));
+            }
+
+            if ($pengguna->jurusan !== null) {
+                $jurusan = [
+                    'id_jurusan' => data_get($pengguna->jurusan, 'id_jurusan'),
+                    'jurusan' => data_get($pengguna->jurusan, 'jurusan'),
+                ];
+                $data->put('jurusan', array_filter($jurusan, fn ($value) => $value !== null));
+            }
+
+            return $data->filter(); // Filter out null values from the entire collection
+        });
+
+    return response()->json($penggunaList);
+}
+
     
-        return response()->json($penggunaList);
-    }
+    
+    
+
+    
     
     public function show($id)
     {

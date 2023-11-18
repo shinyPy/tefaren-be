@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Barang extends Model
 {
+    
     protected $table = 'barang'; // Specify the table name if it's different from the model name
-    protected $primaryKey = 'nomor_barang'; // Specify the primary key column
+    protected $primaryKey = 'id_barang'; // Specify the primary key column
 
-    protected $fillable = ['id_kategori', 'kode_barang', 'nama_barang', 'ketersediaan_barang', 'status_barang', 'gambar_barang'];
+    protected $fillable = ['nomor_barang','id_kategori', 'kode_barang', 'nama_barang', 'ketersediaan_barang', 'status_barang', 'gambar_barang'];
 
     // Add any additional model logic or relationships here
 

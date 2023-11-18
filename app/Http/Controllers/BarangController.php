@@ -17,6 +17,7 @@ class BarangController extends Controller
         // Decrypt sensitive data before returning
         $barang->transform(function ($item) {
             $item->kode_barang = Crypt::decryptString($item->kode_barang);
+            $item->nomor_barang = Crypt::decryptString($item->nomor_barang);
             $item->nama_barang = Crypt::decryptString($item->nama_barang);
             return $item;
         });
