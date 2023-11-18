@@ -6,21 +6,12 @@ use App\Models\Barang;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Crypt;
 
 class BarangController extends Controller
 {
     public function index()
     {
         $barang = Barang::with('kategori')->get();
-
-        // Decrypt sensitive data before returning
-        $barang->transform(function ($item) {
-            $item->kode_barang = Crypt::decryptString($item->kode_barang);
-            $item->nomor_barang = Crypt::decryptString($item->nomor_barang);
-            $item->nama_barang = Crypt::decryptString($item->nama_barang);
-            return $item;
-        });
 
         return response()->json($barang);
     }
@@ -33,26 +24,11 @@ class BarangController extends Controller
             return response()->json(["message" => "Barang not found"], 404);
         }
 
-        try {
-            // Decrypt sensitive data before returning
-            $barang->kode_barang = Crypt::decryptString($barang->kode_barang);
-            $barang->nomor_barang = Crypt::decryptString($barang->nomor_barang);
-            $barang->nama_barang = Crypt::decryptString($barang->nama_barang);
-        } catch (\Exception $e) {
-            // Log the error using the Log facade
-            \Illuminate\Support\Facades\Log::error('Decryption error: ' . $e->getMessage());
-
-            return response()->json(["error" => "Decryption error"], 500);
-        }
-
         return response()->json($barang);
     }
 
     public function store(Request $request)
-    
     {
-        \Illuminate\Support\Facades\Log::info($request->all());
-
         $validator = Validator::make($request->all(), [
             'kategori' => 'required|exists:kategori_barang,kategori',
             'kode_barang' => 'required|unique:barang,kode_barang|max:25',
@@ -72,9 +48,9 @@ class BarangController extends Controller
 
         $barang = new Barang([
             'id_kategori' => $id_kategori,
-            'kode_barang' => Crypt::encryptString($request->kode_barang),
-            'nomor_barang' => Crypt::encryptString($request->nomor_barang),
-            'nama_barang' => Crypt::encryptString($request->nama_barang),
+            'kode_barang' => $request->kode_barang,
+            'nomor_barang' => $request->nomor_barang,
+            'nama_barang' => $request->nama_barang,
             'ketersediaan_barang' => $request->ketersediaan_barang,
             'status_barang' => $request->status_barang,
         ]);
@@ -128,9 +104,9 @@ class BarangController extends Controller
         $id_kategori = Kategori::where('kategori', $kategori)->value('id_kategori');
 
         $barang->id_kategori = $id_kategori;
-        $barang->kode_barang = Crypt::encryptString($request->kode_barang);
-        $barang->nomor_barang = Crypt::encryptString($request->nomor_barang);
-        $barang->nama_barang = Crypt::encryptString($request->nama_barang);
+        $barang->kode_barang = $request->kode_barang;
+        $barang->nomor_barang = $request->nomor_barang;
+        $barang->nama_barang = $request->nama_barang;
         $barang->ketersediaan_barang = $request->ketersediaan_barang;
         $barang->status_barang = $request->status_barang;
 
