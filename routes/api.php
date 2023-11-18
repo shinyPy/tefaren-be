@@ -8,6 +8,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Middleware\AuthenticateUser;
 use App\Http\Controllers\CountController;
+use App\Http\Controllers\PenggunaController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -55,7 +57,7 @@ Route::get('/barangShow', [BarangController::class, 'index']);
 Route::post('/barangAdd', [BarangController::class, 'store']);
 Route::patch('/barangUpdate/{id}', [BarangController::class, 'update']);
 Route::delete('/barangDelete/{nomor_barang}', [BarangController::class, 'destroy']);
-Route::post('/barangShowByNomor', [BarangController::class, 'show']);
+Route::post('/barangtest/{id}', [BarangController::class, 'show']);
 
 Route::get('/jurusan-values', [EnumFetchControllers::class, 'getJurusanValues']);
 Route::get('/jabatan-values', [JabatanValuesControllers::class, 'getJabatanValues']);
@@ -72,5 +74,11 @@ Route::get('count-tipepengguna', [CountController::class, 'countTipePengguna']);
 Route::get('count-tipebarang', [CountController::class, 'countTipeBarang']);
 
 Route::get('/count-barangkategori', [CountController::class, 'countBarangByKategori']);
+
+Route::get('/pengguna', [PenggunaController::class, 'index']);
+Route::get('/pengguna/{id}', [PenggunaController::class, 'show']);
+Route::post('/pengguna', [PenggunaController::class, 'store']);
+Route::put('/pengguna/{id}', [PenggunaController::class, 'update']);
+Route::delete('/pengguna/{id}', [PenggunaController::class, 'destroy']);
 
 });

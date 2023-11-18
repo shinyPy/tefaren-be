@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('barang', function (Blueprint $table) {
-            $table->id('nomor_barang'); // Use id() method to create auto-incrementing primary key
+            $table->id('id_barang'); // Use id() method to create auto-incrementing primary key
+            $table->mediumText('kode_barang')->index('kode_barang');
+            $table->mediumText('nomor_barang')->index('nomor_barang');
             $table->unsignedBigInteger('id_kategori')->nullable();
-            $table->string('kode_barang', 25)->index('kode_barang');
-            $table->string('nama_barang', 100)->index('nama_barang');
+            $table->mediumText('nama_barang')->index('nama_barang');
             $table->enum('ketersediaan_barang', ['Tersedia','Dipinjam','Pemeliharaan','Dihapuskan']);
             $table->enum('status_barang', ['baik','rusak']);
             $table->string('gambar_barang', 255);
