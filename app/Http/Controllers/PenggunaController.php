@@ -106,7 +106,6 @@ class PenggunaController extends Controller
             'nomorinduk_pengguna' => 'required|unique:pengguna,nomorinduk_pengguna,' . $nomorinduk_pengguna . ',nomorinduk_pengguna|max:15',
             'nama_pengguna' => 'required',
             'level_pengguna' => 'required|in:user,admin',
-            'tipe_pengguna' => 'required|in:siswa,guru',
             'id_jurusan' => 'nullable|exists:jurusan,id_jurusan',
             'id_jabatan' => 'nullable|exists:jabatan,id_jabatan',
             'email' => 'required|email|unique:pengguna,email,' . $nomorinduk_pengguna . ',nomorinduk_pengguna|max:50',
@@ -125,7 +124,6 @@ class PenggunaController extends Controller
         // Update other fields
         $pengguna->nama_pengguna = $request->nama_pengguna;
         $pengguna->level_pengguna = $request->level_pengguna;
-        $pengguna->tipe_pengguna = $request->tipe_pengguna;
         $pengguna->id_jurusan = $request->filled('id_jurusan') ? $request->id_jurusan : $pengguna->id_jurusan;
         $pengguna->id_jabatan = $request->filled('id_jabatan') ? $request->id_jabatan : $pengguna->id_jabatan;
         $pengguna->email = $request->email;
