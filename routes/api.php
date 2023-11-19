@@ -79,6 +79,6 @@ Route::get('/pengguna', [PenggunaController::class, 'index']);
 Route::get('/pengguna/{id}', [PenggunaController::class, 'show']);
 Route::post('/pengguna', [PenggunaController::class, 'store']);
 Route::put('/editpengguna/{nomorinduk_pengguna}', [PenggunaController::class, 'update']);
-Route::delete('/pengguna/{id}', [PenggunaController::class, 'destroy']);
+Route::delete('/deletepengguna/{nomorinduk_pengguna}', [PenggunaController::class, 'destroy']);
 
 });
