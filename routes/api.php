@@ -78,7 +78,7 @@ Route::get('/count-barangkategori', [CountController::class, 'countBarangByKateg
 Route::get('/pengguna', [PenggunaController::class, 'index']);
 Route::get('/pengguna/{id}', [PenggunaController::class, 'show']);
 Route::post('/pengguna', [PenggunaController::class, 'store']);
-Route::put('/pengguna/{id}', [PenggunaController::class, 'update']);
+Route::put('/editpengguna/{nomorinduk_pengguna}', [PenggunaController::class, 'update']);
 Route::delete('/pengguna/{id}', [PenggunaController::class, 'destroy']);
 
 });
