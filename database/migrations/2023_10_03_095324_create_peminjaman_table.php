@@ -12,7 +12,8 @@
         public function up(): void
         {
             Schema::create('peminjaman', function (Blueprint $table) {
-                $table->id('nomor_peminjaman'); // Use id() method to create auto-incrementing primary key
+                $table->id('id_peminjaman'); // Use id() method to create auto-incrementing primary key
+                $table->string('nomor_peminjaman'); // Use id() method to create auto-incrementing primary key
                 $table->string('nomorinduk_pengguna', 15)->unique();
                 $table->string('nama_pengguna',100)->unique();
                 $table->integer('nomor_barang')->unique(); // Remove auto_increment from this line

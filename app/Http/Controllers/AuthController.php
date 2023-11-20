@@ -22,7 +22,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:pengguna,email',
             'password' => 'required',
-            'nomorinduk_pengguna' => 'required',
+            'nomorinduk_pengguna' => 'required|max:13', // Add max:13 for a maximum length of 13 characters
             'nama_pengguna' => 'required',
             'tipe_pengguna' => 'required|in:siswa,guru,staff',
             'jurusan_pengguna' => 'sometimes|in:non,rpl,tjkt,dkv,animasi',
@@ -31,11 +31,20 @@ class AuthController extends Controller
     
         if ($validator->fails()) {
             $errors = $validator->errors();
+        
+            // Check for the specific error related to nomorinduk_pengguna length
+            if ($errors->has('nomorinduk_pengguna') && $errors->first('nomorinduk_pengguna') === 'The nomorinduk_pengguna may not be greater than 13 characters.') {
+                return response()->json(["message" => "Nomorinduk_pengguna exceeds the maximum length of 13 characters"], 422);
+            }
+        
+            // Check for the email uniqueness error
             if ($errors->has('email') && $errors->first('email') === 'The email has already been taken.') {
                 return response()->json(["message" => "Email already used"], 422);
             }
+        
             return response()->json(["message" => "Invalid field", "errors" => $errors], 422);
         }
+        
     
         $pengguna = new Pengguna();
         $pengguna->nama_pengguna = $request->nama_pengguna;
