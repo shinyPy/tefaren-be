@@ -34,7 +34,7 @@ class AuthController extends Controller
         
             // Check for the specific error related to nomorinduk_pengguna length
             if ($errors->has('nomorinduk_pengguna') && $errors->first('nomorinduk_pengguna') === 'The nomorinduk_pengguna may not be greater than 13 characters.') {
-                return response()->json(["message" => "Nomorinduk_pengguna exceeds the maximum length of 13 characters"], 422);
+                return response()->json(["message" => $errors->first('nomorinduk_pengguna')], 422);
             }
         
             // Check for the email uniqueness error
@@ -44,6 +44,7 @@ class AuthController extends Controller
         
             return response()->json(["message" => "Invalid field", "errors" => $errors], 422);
         }
+        
         
     
         $pengguna = new Pengguna();

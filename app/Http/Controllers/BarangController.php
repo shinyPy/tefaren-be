@@ -6,15 +6,44 @@ use App\Models\Barang;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
 class BarangController extends Controller
 {
     public function index()
     {
-        $barang = Barang::with('kategori')->get();
-
-        return response()->json($barang);
+        $barangList = Barang::with(['kategori:id_kategori,kategori'])
+            ->select(['id_barang', 'kode_barang', 'nomor_barang', 'id_kategori', 'nama_barang', 'ketersediaan_barang', 'status_barang', 'gambar_barang'])
+            ->get()
+            ->transform(function ($barang) {
+                $data = [
+                    'id_barang' => $barang->id_barang,
+                    'kode_barang' => $barang->kode_barang,
+                    'nomor_barang' => $barang->nomor_barang,
+                    'nama_barang' => $barang->nama_barang,
+                    'ketersediaan_barang' => $barang->ketersediaan_barang,
+                    'status_barang' => $barang->status_barang,
+                    'gambar_barang' => $barang->gambar_barang,
+                ];
+    
+                if ($barang->kategori !== null) {
+                    $kategori = [
+                        'id_kategori' => data_get($barang->kategori, 'id_kategori'),
+                        'kategori' => data_get($barang->kategori, 'kategori'),
+                    ];
+                    $data['kategori'] = array_filter($kategori, fn ($value) => $value !== null);
+                } else {
+                    $data['kategori'] = null;
+                }
+    
+                return $data;
+            });
+    
+        return response()->json($barangList);
     }
+    
+    
+    
+    
+
 
     public function show($id)
     {
