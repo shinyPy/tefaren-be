@@ -54,12 +54,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-Route::get('/barangShow', [BarangController::class, 'index']);
-Route::post('/barangAdd', [BarangController::class, 'store']);
+
 Route::put('/barangUpdate/{id}', [BarangController::class, 'update']);
 Route::delete('/barangDelete/{nomor_barang}', [BarangController::class, 'destroy']);
 Route::post('/barangtest/{id}', [BarangController::class, 'show']);
-
+Route::get('/barangShow', [BarangController::class, 'index']);
+Route::post('/barangAdd', [BarangController::class, 'store']);
 
 
 Route::get('count-usersbyjurusan', [CountController::class, 'countUsersByJurusan']);
