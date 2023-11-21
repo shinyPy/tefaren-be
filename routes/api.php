@@ -57,7 +57,7 @@ Route::middleware('auth:api')->group(function () {
 Route::get('/kategori-values', [JabatanValuesControllers::class, 'getKategoriValues']);
 
 Route::put('/barangUpdate/{id}', [BarangController::class, 'update']);
-Route::delete('/barangDelete/{nomor_barang}', [BarangController::class, 'destroy']);
+Route::delete('/barangDelete/{id}', [BarangController::class, 'destroy']);
 Route::post('/barangtest/{id}', [BarangController::class, 'show']);
 Route::get('/barangShow', [BarangController::class, 'index']);
 Route::post('/barangAdd', [BarangController::class, 'store']);

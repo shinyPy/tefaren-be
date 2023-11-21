@@ -14,8 +14,9 @@
             Schema::create('peminjaman', function (Blueprint $table) {
                 $table->id('id_peminjaman');
                 $table->unsignedBigInteger('id_permohonan')->unique();
-                $table->string('nomor_peminjaman', 3)->unique();
+                $table->string('nomor_peminjaman', 3);
                 $table->string('nomorinduk_pengguna', 15)->unique();
+                $table->foreign('nomorinduk_pengguna')->references('nomorinduk_pengguna')->on('pengguna');
                 $table->string('nama_pengguna', 100)->unique();
                 $table->integer('nomor_barang')->unique();
                 $table->string('kode_barang', 15)->index('kode_barang');

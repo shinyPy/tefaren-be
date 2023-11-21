@@ -12,17 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pengembalian', function (Blueprint $table) {
-            $table->id('id_pengembalian'); // Use id() method to create auto-incrementing primary key
-            $table->integer('id_peminjaman')->unique(); // Use id() method to create auto-incrementing primary key
-            $table->string('nomorinduk_pengguna', 15)->unique();
-            $table->string('nama_pengguna',100)->unique();
+            $table->id('id_pengembalian');
+            $table->unsignedBigInteger('id_peminjaman')->unique();
+            $table->foreign('id_peminjaman')->references('id_peminjaman')->on('peminjaman')->onDelete('cascade');
+
+            $table->string('nomorinduk_pengguna', 15);
+            $table->foreign('nomorinduk_pengguna')->references('nomorinduk_pengguna')->on('pengguna');
+
+            $table->string('nama_pengguna', 100)->unique();
             $table->integer('nomor_barang')->unique(); // Remove auto_increment from this line
             $table->string('kode_barang', 15)->index('kode_barang');
             $table->enum('status_barang', ['baik','rusak'])->unique();
             $table->date('tanggal_pengembalian');
-            $table->string('bukti_pengembalian',100);
+            $table->string('bukti_pengembalian', 100);
             $table->enum('status_pengembalian', ['dikembalikan', 'dicek']);
 
+            $table->timestamps();
         });
     }
 
