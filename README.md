@@ -20,7 +20,7 @@ You can just use Github Desktop for this
 ```
 php artisan jwt:secret
 ```
-*Then run this command
+Then run this command
 ```
 php artisan serve
 ```
