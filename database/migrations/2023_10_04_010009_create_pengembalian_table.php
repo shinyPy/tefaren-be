@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreign('nomorinduk_pengguna')->references('nomorinduk_pengguna')->on('pengguna');
 
             $table->string('nama_pengguna', 100)->unique();
-            $table->integer('nomor_barang')->unique(); // Remove auto_increment from this line
+            $table->string('nomor_barang'); // Remove auto_increment from this line
             $table->string('kode_barang', 15)->index('kode_barang');
             $table->enum('status_barang', ['baik','rusak'])->unique();
             $table->date('tanggal_pengembalian');
