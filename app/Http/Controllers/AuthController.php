@@ -22,7 +22,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:pengguna,email',
             'password' => 'required',
-            'nomorinduk_pengguna' => 'required|unique:pengguna,nomorinduk_pengguna|max:13',
+            'nomorinduk_pengguna' => 'required|unique:pengguna,nomorinduk_pengguna|max:13', // Add max:13 for a maximum length of 13 characters
             'nama_pengguna' => 'required',
             'tipe_pengguna' => 'required|in:siswa,guru,staff',
             'jurusan_pengguna' => 'sometimes|in:non,rpl,tjkt,dkv,animasi',
@@ -49,12 +49,6 @@ class AuthController extends Controller
     
             return response()->json(["message" => "Mungkin beberapa field telah melebihi batas dan invalid.", "errors" => $errors], 422);
         }
-    
-        // Your registration logic here...
-    
-        return response()->json(["message" => "User registered successfully"], 200);
-    }
-    
         
         
     
