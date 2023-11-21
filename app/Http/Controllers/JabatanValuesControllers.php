@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jabatan;
+use App\Models\Kategori;
 
 class JabatanValuesControllers extends Controller
 {
@@ -11,5 +12,12 @@ class JabatanValuesControllers extends Controller
         $jurusanValues = Jabatan::pluck('jabatan');
     
         return response()->json($jurusanValues);
+    }
+
+    public function getKategoriValues()
+    {
+        $kategoriValues = Kategori::pluck('kategori');
+    
+        return response()->json($kategoriValues);
     }
 }

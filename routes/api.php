@@ -54,6 +54,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+Route::get('/kategori-values', [JabatanValuesControllers::class, 'getKategoriValues']);
 
 Route::put('/barangUpdate/{id}', [BarangController::class, 'update']);
 Route::delete('/barangDelete/{nomor_barang}', [BarangController::class, 'destroy']);

@@ -32,7 +32,7 @@ return new class extends Migration
             $table->tinyInteger('jumlah_barang');
             $table->date('tanggal_peminjaman');
             $table->string('lama_peminjaman');
-            $table->string('status_peminjaman');
+            $table->enum('status_peminjaman', ['tolak','terima','diajukan']);
 
 
 
