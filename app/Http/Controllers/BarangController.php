@@ -107,7 +107,6 @@ class BarangController extends Controller
             return response()->json(["message" => "Barang not found"], 404);
         }
     
-        // Validate the request data
         $validator = Validator::make($request->all(), [
             'kategori' => 'required|exists:kategori_barang,kategori',
             'kode_barang' => 'required|unique:barang,kode_barang,' . $id . ',id_barang|max:25',
@@ -124,14 +123,11 @@ class BarangController extends Controller
     
         // Handle image update if a new image is provided
         if ($request->hasFile('gambar_barang')) {
-            // Delete the old image if it exists
-            if ($barang->gambar_barang !== 'none') {
-                Storage::disk('public')->delete($barang->gambar_barang);
-            }
-    
-            // Store the new image
             $imagePath = $request->file('gambar_barang')->store('barang_images', 'public');
             $barang->gambar_barang = $imagePath;
+        } else {
+            // If no new image is provided, set it to 'none'
+            $barang->gambar_barang = 'none';
         }
     
         $kategori = $request->input('kategori');
@@ -148,6 +144,7 @@ class BarangController extends Controller
     
         return response()->json(["message" => "Barang sukses diupdate"]);
     }
+    
     public function destroy($id)
     {
         $barang = Barang::find($id);
