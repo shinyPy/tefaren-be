@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             'nomorinduk_pengguna' => 231,
             'nama_pengguna' => 'Admin',
             'tipe_pengguna' => 'guru',
+            'level_pengguna' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('admin123'),
         ]);
