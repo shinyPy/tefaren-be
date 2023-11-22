@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\Models\Barang;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
@@ -106,47 +107,31 @@ class BarangController extends Controller
             return response()->json(["message" => "Barang not found"], 404);
         }
     
-        // Check the content type of the request
-        $contentType = $request->header('Content-Type');
-        
-        if (strpos($contentType, 'multipart/form-data') !== false) {
-            // Handle multipart/form-data request
-            $validator = Validator::make($request->all(), [
-                'kategori' => 'required|exists:kategori_barang,kategori',
-                'kode_barang' => 'required|unique:barang,kode_barang,' . $id . ',id_barang|max:25',
-                'nomor_barang' => 'required|unique:barang,nomor_barang,' . $id . ',id_barang|max:25',
-                'nama_barang' => 'required|max:100',
-                'ketersediaan_barang' => 'required|in:Tersedia,Dipinjam,Pemeliharaan,Dihapuskan',
-                'status_barang' => 'required|in:baik,rusak',
-                'gambar_barang' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            ]);
+        // Validate the request data
+        $validator = Validator::make($request->all(), [
+            'kategori' => 'required|exists:kategori_barang,kategori',
+            'kode_barang' => 'required|unique:barang,kode_barang,' . $id . ',id_barang|max:25',
+            'nomor_barang' => 'required|unique:barang,nomor_barang,' . $id . ',id_barang|max:25',
+            'nama_barang' => 'required|max:100',
+            'ketersediaan_barang' => 'required|in:Tersedia,Dipinjam,Pemeliharaan,Dihapuskan',
+            'status_barang' => 'required|in:baik,rusak',
+            'gambar_barang' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
     
-            if ($validator->fails()) {
-                return response()->json(["message" => "Field invalid", "errors" => $validator->errors()], 422);
+        if ($validator->fails()) {
+            return response()->json(["message" => "Field invalid", "errors" => $validator->errors()], 422);
+        }
+    
+        // Handle image update if a new image is provided
+        if ($request->hasFile('gambar_barang')) {
+            // Delete the old image if it exists
+            if ($barang->gambar_barang !== 'none') {
+                Storage::disk('public')->delete($barang->gambar_barang);
             }
     
-            // Handle image update if a new image is provided
-            if ($request->hasFile('gambar_barang')) {
-                $imagePath = $request->file('gambar_barang')->store('barang_images', 'public');
-                $barang->gambar_barang = $imagePath;
-            } else {
-                // kalau gambar_barang tidak di dinput set sebagai none
-                $barang->gambar_barang = 'none';
-            }
-        } else {
-            // Handle JSON request
-            $validator = Validator::make($request->json()->all(), [
-                'kategori' => 'required|exists:kategori_barang,kategori',
-                'kode_barang' => 'required|unique:barang,kode_barang,' . $id . ',id_barang|max:25',
-                'nomor_barang' => 'required|unique:barang,nomor_barang,' . $id . ',id_barang|max:25',
-                'nama_barang' => 'required|max:100',
-                'ketersediaan_barang' => 'required|in:Tersedia,Dipinjam,Pemeliharaan,Dihapuskan',
-                'status_barang' => 'required|in:baik,rusak',
-            ]);
-    
-            if ($validator->fails()) {
-                return response()->json(["message" => "Field invalid", "errors" => $validator->errors()], 422);
-            }
+            // Store the new image
+            $imagePath = $request->file('gambar_barang')->store('barang_images', 'public');
+            $barang->gambar_barang = $imagePath;
         }
     
         $kategori = $request->input('kategori');
@@ -163,7 +148,6 @@ class BarangController extends Controller
     
         return response()->json(["message" => "Barang sukses diupdate"]);
     }
-    
     public function destroy($id)
     {
         $barang = Barang::find($id);
