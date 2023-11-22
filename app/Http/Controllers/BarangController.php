@@ -117,7 +117,7 @@ class BarangController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(["message" => "Invalid field", "errors" => $validator->errors()], 422);
+            return response()->json(["message" => "Field invalid", "errors" => $validator->errors()], 422);
         }
 
         // Handle image update if a new image is provided
@@ -125,7 +125,7 @@ class BarangController extends Controller
             $imagePath = $request->file('gambar_barang')->store('barang_images', 'public');
             $barang->gambar_barang = $imagePath;
         } else {
-            // If gambar_barang is not provided, set it as "none"
+            // kalau gambar_barang tidak di dinput set sebagai none
             $barang->gambar_barang = 'none';
         }
 
@@ -141,7 +141,7 @@ class BarangController extends Controller
 
         $barang->save();
 
-        return response()->json(["message" => "Barang updated successfully"]);
+        return response()->json(["message" => "Barang sukses diupdate"]);
     }
 
     public function destroy($id)
@@ -149,11 +149,11 @@ class BarangController extends Controller
         $barang = Barang::find($id);
 
         if (!$barang) {
-            return response()->json(["message" => "Barang not found"], 404);
+            return response()->json(["message" => "Barang tidak ditemukan"], 404);
         }
 
         $barang->delete();
 
-        return response()->json(["message" => "Barang deleted successfully"]);
+        return response()->json(["message" => "Barang telah dihapus"]);
     }
 }

@@ -47,7 +47,7 @@ class AuthController extends Controller
                 return response()->json(["message" => "Nomor Induk telah dipakai"], 422);
             }
     
-            return response()->json(["message" => "Mungkin beberapa field telah melebihi batas dan invalid.", "errors" => $errors], 422);
+            return response()->json(["message" => "Field invalid.", "errors" => $errors], 422);
         }
         
         

@@ -10,6 +10,9 @@ use App\Http\Middleware\AuthenticateUser;
 use App\Http\Controllers\CountController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\JurusanController;
+use App\Http\Controllers\JabatanController;
+use App\Http\Controllers\KategoriController;
+use App\Models\Kategori;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,11 +61,21 @@ Route::middleware('auth:api')->group(function () {
     });
 Route::get('/kategori-values', [JabatanValuesControllers::class, 'getKategoriValues']);
 
+
+Route::get('/get-kategori', [KategoriController::class, 'index']);
+Route::post('/add-kategori', [KategoriController::class, 'store']);
+Route::put('/edit-kategori/{id}', [KategoriController::class, 'update']);
+Route::delete('/delete-kategori/{id}', [KategoriController::class, 'destroy']);
+
 Route::get('/get-jurusan', [JurusanController::class, 'index']);
 Route::post('/add-jurusan', [JurusanController::class, 'store']);
 Route::put('/edit-jurusan/{id}', [JurusanController::class, 'update']);
 Route::delete('/delete-jurusan/{id}', [JurusanController::class, 'destroy']);
 
+Route::get('/get-jabatan', [JabatanController::class, 'index']);
+Route::post('/add-jabatan', [JabatanController::class, 'store']);
+Route::put('/edit-jabatan/{id}', [JabatanController::class, 'update']);
+Route::delete('/delete-jabatan/{id}', [JabatanController::class, 'destroy']);
 
 Route::put('/barangUpdate/{id}', [BarangController::class, 'update']);
 Route::delete('/barangDelete/{id}', [BarangController::class, 'destroy']);

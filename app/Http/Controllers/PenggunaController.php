@@ -58,38 +58,38 @@ class PenggunaController extends Controller
         return response()->json($pengguna);
     }
 
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'nomorinduk_pengguna' => 'required|unique:pengguna,nomorinduk_pengguna|max:15',
-            'nama_pengguna' => 'required',
-            'level_pengguna' => 'required|in:user,admin',
-            'tipe_pengguna' => 'required|in:siswa,guru',
-            'id_jurusan' => 'nullable|exists:jurusan,id_jurusan',
-            'id_jabatan' => 'nullable|exists:jabatan,id_jabatan',
-            'email' => 'required|email|unique:pengguna,email|max:50',
-            'password' => 'required|min:6',
-        ]);
+    // public function store(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'nomorinduk_pengguna' => 'required|unique:pengguna,nomorinduk_pengguna|max:15',
+    //         'nama_pengguna' => 'required',
+    //         'level_pengguna' => 'required|in:user,admin',
+    //         'tipe_pengguna' => 'required|in:siswa,guru',
+    //         'id_jurusan' => 'nullable|exists:jurusan,id_jurusan',
+    //         'id_jabatan' => 'nullable|exists:jabatan,id_jabatan',
+    //         'email' => 'required|email|unique:pengguna,email|max:50',
+    //         'password' => 'required|min:6',
+    //     ]);
 
-        if ($validator->fails()) {
-            return response()->json(["message" => "Invalid field", "errors" => $validator->errors()], 422);
-        }
+    //     if ($validator->fails()) {
+    //         return response()->json(["message" => "Invalid field", "errors" => $validator->errors()], 422);
+    //     }
 
-        $pengguna = new Pengguna([
-            'nomorinduk_pengguna' => $request->nomorinduk_pengguna,
-            'nama_pengguna' => $request->nama_pengguna,
-            'level_pengguna' => $request->level_pengguna,
-            'tipe_pengguna' => $request->tipe_pengguna,
-            'id_jurusan' => $request->id_jurusan,
-            'id_jabatan' => $request->id_jabatan,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+    //     $pengguna = new Pengguna([
+    //         'nomorinduk_pengguna' => $request->nomorinduk_pengguna,
+    //         'nama_pengguna' => $request->nama_pengguna,
+    //         'level_pengguna' => $request->level_pengguna,
+    //         'tipe_pengguna' => $request->tipe_pengguna,
+    //         'id_jurusan' => $request->id_jurusan,
+    //         'id_jabatan' => $request->id_jabatan,
+    //         'email' => $request->email,
+    //         'password' => Hash::make($request->password),
+    //     ]);
 
-        $pengguna->save();
+    //     $pengguna->save();
 
-        return response()->json(["message" => "Pengguna added successfully"], 201);
-    }
+    //     return response()->json(["message" => "Pengguna added successfully"], 201);
+    // }
 
     public function update(Request $request, $nomorinduk_pengguna)
     {
@@ -98,7 +98,7 @@ class PenggunaController extends Controller
     
         // Check if Pengguna exists
         if (!$pengguna) {
-            return response()->json(["message" => "Pengguna not found"], 404);
+            return response()->json(["message" => "Pengguna tidak ditemukan"], 404);
         }
     
         // Validate the request data
@@ -115,7 +115,7 @@ class PenggunaController extends Controller
     
         // If validation fails, return the errors
         if ($validator->fails()) {
-            return response()->json(["message" => "Invalid field", "errors" => $validator->errors()], 422);
+            return response()->json(["message" => "Field salah", "errors" => $validator->errors()], 422);
         }
     
         // Update nomorinduk_pengguna separately, as it's used in the unique validation rule
@@ -147,7 +147,7 @@ class PenggunaController extends Controller
         // Save the changes
         $pengguna->save();
     
-        return response()->json(["message" => "Pengguna updated successfully"]);
+        return response()->json(["message" => "Pengguna telah diupdate"]);
     }
     
     
@@ -157,11 +157,11 @@ public function destroy($nomorinduk_pengguna)
     $pengguna = Pengguna::where('nomorinduk_pengguna', $nomorinduk_pengguna)->first();
 
     if (!$pengguna) {
-        return response()->json(["message" => "Pengguna not found"], 404);
+        return response()->json(["message" => "Pengguna tidak ditemukan"], 404);
     }
 
     $pengguna->delete();
 
-    return response()->json(["message" => "Pengguna deleted successfully"]);
+    return response()->json(["message" => "Pengguna telah dihapus"]);
 }
 }

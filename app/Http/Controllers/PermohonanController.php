@@ -41,7 +41,6 @@ class PermohonanController extends Controller
             'jumlah_barang' => 'required|integer',
             'tanggal_peminjaman' => 'required|date',
             'lama_peminjaman' => 'required',
-            'status_peminjaman' => 'required',
         ]);
 
         $permohonan = Permohonan::create($request->all());

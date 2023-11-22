@@ -36,7 +36,7 @@ class JurusanController extends Controller
         $jurusan = Jurusan::find($id);
     
         if (!$jurusan) {
-            return response()->json(['error' => 'Jurusan not found'], 404);
+            return response()->json(['error' => 'Jurusan tidak ditemukan'], 404);
         }
     
         $request->validate([
@@ -53,7 +53,7 @@ class JurusanController extends Controller
         $jurusan = Jurusan::find($id);
     
         if (!$jurusan) {
-            return response()->json(['error' => 'Jurusan not found'], 404);
+            return response()->json(['error' => 'Jurusan tidak ditemukan'], 404);
         }
     
         $jurusan->delete();
