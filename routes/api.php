@@ -9,6 +9,7 @@ use App\Http\Controllers\BarangController;
 use App\Http\Middleware\AuthenticateUser;
 use App\Http\Controllers\CountController;
 use App\Http\Controllers\PenggunaController;
+use App\Http\Controllers\JurusanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,7 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 // });
 Route::get('/jurusan-values', [EnumFetchControllers::class, 'getJurusanValues']);
 Route::get('/jabatan-values', [JabatanValuesControllers::class, 'getJabatanValues']);
+
 Route::middleware('auth:api')->group(function () {
     // Define your routes here that should use the 'auth:api' middleware.
     Route::get('/user', function (Request $request) {
@@ -56,9 +58,14 @@ Route::middleware('auth:api')->group(function () {
     });
 Route::get('/kategori-values', [JabatanValuesControllers::class, 'getKategoriValues']);
 
+Route::get('/get-jurusan', [JurusanController::class, 'index']);
+Route::post('/add-jurusan', [JurusanController::class, 'store']);
+Route::put('/edit-jurusan/{id}', [JurusanController::class, 'update']);
+Route::delete('/delete-jurusan/{id}', [JurusanController::class, 'destroy']);
+
+
 Route::put('/barangUpdate/{id}', [BarangController::class, 'update']);
 Route::delete('/barangDelete/{id}', [BarangController::class, 'destroy']);
-Route::post('/barangtest/{id}', [BarangController::class, 'show']);
 Route::get('/barangShow', [BarangController::class, 'index']);
 Route::post('/barangAdd', [BarangController::class, 'store']);
 
@@ -78,7 +85,6 @@ Route::get('/count-barangkategori', [CountController::class, 'countBarangByKateg
 
 Route::get('/pengguna', [PenggunaController::class, 'index']);
 Route::get('/pengguna/{id}', [PenggunaController::class, 'show']);
-Route::post('/pengguna', [PenggunaController::class, 'store']);
 Route::put('/editpengguna/{nomorinduk_pengguna}', [PenggunaController::class, 'update']);
 Route::delete('/deletepengguna/{nomorinduk_pengguna}', [PenggunaController::class, 'destroy']);
 

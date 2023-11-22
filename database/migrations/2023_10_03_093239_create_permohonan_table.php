@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('nama_pengguna', 50)->index(); // Index added
 
             $table->enum('tipe_pengguna', ['siswa', 'guru'])->index();
-            $table->foreign('tipe_pengguna')->references('tipe_pengguna')->on('pengguna');
 
             $table->unsignedBigInteger('id_jurusan')->nullable();
             $table->foreign('id_jurusan')->references('id_jurusan')->on('pengguna')->onDelete('cascade');

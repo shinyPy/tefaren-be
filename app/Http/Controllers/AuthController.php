@@ -25,8 +25,8 @@ class AuthController extends Controller
             'nomorinduk_pengguna' => 'required|unique:pengguna,nomorinduk_pengguna|max:13', // Add max:13 for a maximum length of 13 characters
             'nama_pengguna' => 'required',
             'tipe_pengguna' => 'required|in:siswa,guru,staff',
-            'jurusan_pengguna' => 'sometimes|in:non,rpl,tjkt,dkv,animasi',
-            'jabatan_pengguna' => 'sometimes|in:non,administrasi,produktif,nonproduktif,perpustakaan',
+            'jurusan_pengguna' => 'sometimes|exists:jurusan,jurusan',
+            'jabatan_pengguna' => 'sometimes|exists:jabatan,jabatan',
         ]);
     
         if ($validator->fails()) {

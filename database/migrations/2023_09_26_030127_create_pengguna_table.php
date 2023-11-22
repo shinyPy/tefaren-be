@@ -10,7 +10,7 @@ return new class extends Migration {
             $table->string('nomorinduk_pengguna', 15)->unique();
             $table->string('nama_pengguna')->index();
             $table->enum('level_pengguna', ['user', 'admin']);
-            $table->enum('tipe_pengguna', ['siswa', 'guru'])->unique();
+            $table->enum('tipe_pengguna', ['siswa', 'guru']);
             $table->unsignedBigInteger('id_jurusan')->nullable();
             $table->unsignedBigInteger('id_jabatan')->nullable();
             $table->string('email', 50)->unique();

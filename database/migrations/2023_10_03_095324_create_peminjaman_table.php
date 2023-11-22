@@ -16,7 +16,7 @@
                 $table->unsignedBigInteger('id_permohonan')->unique();
                 $table->string('nomor_peminjaman', 3);
                 $table->string('nomorinduk_pengguna', 15)->unique();
-                $table->foreign('nomorinduk_pengguna')->references('nomorinduk_pengguna')->on('pengguna');
+                $table->foreign('nomorinduk_pengguna')->references('nomorinduk_pengguna')->on('permohonan');
                 $table->string('nama_pengguna', 100)->unique();
                 $table->integer('nomor_barang')->unique();
                 $table->string('kode_barang', 15)->index('kode_barang');
