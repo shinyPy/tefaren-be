@@ -51,6 +51,10 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
+Route::get('/check-email', [PenggunaController::class, 'checkEmail']);
+
+
 Route::get('/jurusan-values', [EnumFetchControllers::class, 'getJurusanValues']);
 Route::get('/jabatan-values', [JabatanValuesControllers::class, 'getJabatanValues']);
 
