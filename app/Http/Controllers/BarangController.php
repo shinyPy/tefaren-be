@@ -101,49 +101,69 @@ class BarangController extends Controller
     public function update(Request $request, $id)
     {
         $barang = Barang::find($id);
-
+    
         if (!$barang) {
             return response()->json(["message" => "Barang not found"], 404);
         }
-
-        $validator = Validator::make($request->all(), [
-            'kategori' => 'required|exists:kategori_barang,kategori',
-            'kode_barang' => 'required|unique:barang,kode_barang,' . $id . ',id_barang|max:25',
-            'nomor_barang' => 'required|unique:barang,nomor_barang,' . $id . ',id_barang|max:25',
-            'nama_barang' => 'required|max:100',
-            'ketersediaan_barang' => 'required|in:Tersedia,Dipinjam,Pemeliharaan,Dihapuskan',
-            'status_barang' => 'required|in:baik,rusak',
-            'gambar_barang' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(["message" => "Field invalid", "errors" => $validator->errors()], 422);
-        }
-
-        // Handle image update if a new image is provided
-        if ($request->hasFile('gambar_barang')) {
-            $imagePath = $request->file('gambar_barang')->store('barang_images', 'public');
-            $barang->gambar_barang = $imagePath;
+    
+        // Check the content type of the request
+        $contentType = $request->header('Content-Type');
+        
+        if (strpos($contentType, 'multipart/form-data') !== false) {
+            // Handle multipart/form-data request
+            $validator = Validator::make($request->all(), [
+                'kategori' => 'required|exists:kategori_barang,kategori',
+                'kode_barang' => 'required|unique:barang,kode_barang,' . $id . ',id_barang|max:25',
+                'nomor_barang' => 'required|unique:barang,nomor_barang,' . $id . ',id_barang|max:25',
+                'nama_barang' => 'required|max:100',
+                'ketersediaan_barang' => 'required|in:Tersedia,Dipinjam,Pemeliharaan,Dihapuskan',
+                'status_barang' => 'required|in:baik,rusak',
+                'gambar_barang' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json(["message" => "Field invalid", "errors" => $validator->errors()], 422);
+            }
+    
+            // Handle image update if a new image is provided
+            if ($request->hasFile('gambar_barang')) {
+                $imagePath = $request->file('gambar_barang')->store('barang_images', 'public');
+                $barang->gambar_barang = $imagePath;
+            } else {
+                // kalau gambar_barang tidak di dinput set sebagai none
+                $barang->gambar_barang = 'none';
+            }
         } else {
-            // kalau gambar_barang tidak di dinput set sebagai none
-            $barang->gambar_barang = 'none';
+            // Handle JSON request
+            $validator = Validator::make($request->json()->all(), [
+                'kategori' => 'required|exists:kategori_barang,kategori',
+                'kode_barang' => 'required|unique:barang,kode_barang,' . $id . ',id_barang|max:25',
+                'nomor_barang' => 'required|unique:barang,nomor_barang,' . $id . ',id_barang|max:25',
+                'nama_barang' => 'required|max:100',
+                'ketersediaan_barang' => 'required|in:Tersedia,Dipinjam,Pemeliharaan,Dihapuskan',
+                'status_barang' => 'required|in:baik,rusak',
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json(["message" => "Field invalid", "errors" => $validator->errors()], 422);
+            }
         }
-
+    
         $kategori = $request->input('kategori');
         $id_kategori = Kategori::where('kategori', $kategori)->value('id_kategori');
-
+    
         $barang->id_kategori = $id_kategori;
         $barang->kode_barang = $request->kode_barang;
         $barang->nomor_barang = $request->nomor_barang;
         $barang->nama_barang = $request->nama_barang;
         $barang->ketersediaan_barang = $request->ketersediaan_barang;
         $barang->status_barang = $request->status_barang;
-
+    
         $barang->save();
-
+    
         return response()->json(["message" => "Barang sukses diupdate"]);
     }
-
+    
     public function destroy($id)
     {
         $barang = Barang::find($id);
