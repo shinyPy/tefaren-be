@@ -7,6 +7,7 @@ use App\Models\Barang;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+
 class BarangController extends Controller
 {
     public function index()
@@ -24,7 +25,7 @@ class BarangController extends Controller
                     'status_barang' => $barang->status_barang,
                     'gambar_barang' => $barang->gambar_barang,
                 ];
-    
+
                 if ($barang->kategori !== null) {
                     $kategori = [
                         'id_kategori' => data_get($barang->kategori, 'id_kategori'),
@@ -34,16 +35,16 @@ class BarangController extends Controller
                 } else {
                     $data['kategori'] = null;
                 }
-    
+
                 return $data;
             });
-    
+
         return response()->json($barangList);
     }
-    
-    
-    
-    
+
+
+
+
 
 
     public function show($id)
@@ -102,11 +103,11 @@ class BarangController extends Controller
     public function update(Request $request, $id)
     {
         $barang = Barang::find($id);
-    
+
         if (!$barang) {
             return response()->json(["message" => "Barang not found"], 404);
         }
-    
+
         $validator = Validator::make($request->all(), [
             'kategori' => 'required|exists:kategori_barang,kategori',
             'kode_barang' => 'required|unique:barang,kode_barang,' . $id . ',id_barang|max:25',
@@ -114,37 +115,51 @@ class BarangController extends Controller
             'nama_barang' => 'required|max:100',
             'ketersediaan_barang' => 'required|in:Tersedia,Dipinjam,Pemeliharaan,Dihapuskan',
             'status_barang' => 'required|in:baik,rusak',
-            'gambar_barang' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gambar_barang' => 'nullable|string',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json(["message" => "Field invalid", "errors" => $validator->errors()], 422);
         }
-    
-        // Handle image update if a new image is provided
-        if ($request->hasFile('gambar_barang')) {
-            $imagePath = $request->file('gambar_barang')->store('barang_images', 'public');
-            $barang->gambar_barang = $imagePath;
-        } else {
-            // If no new image is provided, set it to 'none'
-            $barang->gambar_barang = 'none';
+
+        if ($request->gambar_barang !== null) {
+            $barang->gambar_barang = $request->gambar_barang;
         }
-    
+
         $kategori = $request->input('kategori');
         $id_kategori = Kategori::where('kategori', $kategori)->value('id_kategori');
-    
+
         $barang->id_kategori = $id_kategori;
         $barang->kode_barang = $request->kode_barang;
         $barang->nomor_barang = $request->nomor_barang;
         $barang->nama_barang = $request->nama_barang;
         $barang->ketersediaan_barang = $request->ketersediaan_barang;
         $barang->status_barang = $request->status_barang;
-    
+
         $barang->save();
-    
+
         return response()->json(["message" => "Barang sukses diupdate"]);
     }
-    
+
+    public function uploadGambarBarang(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'gambar_barang' => 'image|mimes:jpeg,png,jpg,gif|max:2048|required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'error' => $validator->errors()], 400);
+        }
+
+        if ($request->hasFile('gambar_barang')) {
+            $imagePath = $request->file('gambar_barang')->store('barang_images', 'public');
+            return response()->json(['success' => true, 'message' => 'gambar uploaded', 'gambar_barang' => $imagePath]);
+        } else {
+            // If no new image is provided, set it to 'none'
+            return response()->json(['success' => true, 'message' => 'gambar uploaded', 'gambar_barang' => null]);
+        }
+    }
+
     public function destroy($id)
     {
         $barang = Barang::find($id);

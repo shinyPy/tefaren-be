@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\EnumFetchControllers;
@@ -63,46 +64,45 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-Route::get('/kategori-values', [JabatanValuesControllers::class, 'getKategoriValues']);
+    Route::get('/kategori-values', [JabatanValuesControllers::class, 'getKategoriValues']);
 
 
-Route::get('/get-kategori', [KategoriController::class, 'index']);
-Route::post('/add-kategori', [KategoriController::class, 'store']);
-Route::put('/edit-kategori/{id}', [KategoriController::class, 'update']);
-Route::delete('/delete-kategori/{id}', [KategoriController::class, 'destroy']);
+    Route::get('/get-kategori', [KategoriController::class, 'index']);
+    Route::post('/add-kategori', [KategoriController::class, 'store']);
+    Route::put('/edit-kategori/{id}', [KategoriController::class, 'update']);
+    Route::delete('/delete-kategori/{id}', [KategoriController::class, 'destroy']);
 
-Route::get('/get-jurusan', [JurusanController::class, 'index']);
-Route::post('/add-jurusan', [JurusanController::class, 'store']);
-Route::put('/edit-jurusan/{id}', [JurusanController::class, 'update']);
-Route::delete('/delete-jurusan/{id}', [JurusanController::class, 'destroy']);
+    Route::get('/get-jurusan', [JurusanController::class, 'index']);
+    Route::post('/add-jurusan', [JurusanController::class, 'store']);
+    Route::put('/edit-jurusan/{id}', [JurusanController::class, 'update']);
+    Route::delete('/delete-jurusan/{id}', [JurusanController::class, 'destroy']);
 
-Route::get('/get-jabatan', [JabatanController::class, 'index']);
-Route::post('/add-jabatan', [JabatanController::class, 'store']);
-Route::put('/edit-jabatan/{id}', [JabatanController::class, 'update']);
-Route::delete('/delete-jabatan/{id}', [JabatanController::class, 'destroy']);
+    Route::get('/get-jabatan', [JabatanController::class, 'index']);
+    Route::post('/add-jabatan', [JabatanController::class, 'store']);
+    Route::put('/edit-jabatan/{id}', [JabatanController::class, 'update']);
+    Route::delete('/delete-jabatan/{id}', [JabatanController::class, 'destroy']);
 
-Route::put('/barangUpdate/{id}', [BarangController::class, 'update']);
-Route::delete('/barangDelete/{id}', [BarangController::class, 'destroy']);
-Route::get('/barangShow', [BarangController::class, 'index']);
-Route::post('/barangAdd', [BarangController::class, 'store']);
+    Route::put('/barangUpdate/{id}', [BarangController::class, 'update']);
+    Route::delete('/barangDelete/{id}', [BarangController::class, 'destroy']);
+    Route::get('/barangShow', [BarangController::class, 'index']);
+    Route::post('/barangAdd', [BarangController::class, 'store']);
+    Route::post('/upload-gambar-barang', [BarangController::class, 'uploadGambarBarang']);
 
+    Route::get('count-usersbyjurusan', [CountController::class, 'countUsersByJurusan']);
+    Route::get('count-usersbyjabatan', [CountController::class, 'countUsersByJabatan']);
 
-Route::get('count-usersbyjurusan', [CountController::class, 'countUsersByJurusan']);
-Route::get('count-usersbyjabatan', [CountController::class, 'countUsersByJabatan']);
+    Route::get('count-barang', [CountController::class, 'countBarang']);
+    Route::get('count-pengguna', [CountController::class, 'countPengguna']);
+    Route::get('count-peminjaman', [CountController::class, 'countPeminjaman']);
+    Route::get('count-pengembalian', [CountController::class, 'countPengembalian']);
+    Route::get('count-permohonan', [CountController::class, 'countPermohonan']);
+    Route::get('count-tipepengguna', [CountController::class, 'countTipePengguna']);
+    Route::get('count-tipebarang', [CountController::class, 'countTipeBarang']);
 
-Route::get('count-barang', [CountController::class, 'countBarang']);
-Route::get('count-pengguna', [CountController::class, 'countPengguna']);
-Route::get('count-peminjaman', [CountController::class, 'countPeminjaman']);
-Route::get('count-pengembalian', [CountController::class, 'countPengembalian']);
-Route::get('count-permohonan', [CountController::class, 'countPermohonan']);
-Route::get('count-tipepengguna', [CountController::class, 'countTipePengguna']);
-Route::get('count-tipebarang', [CountController::class, 'countTipeBarang']);
+    Route::get('/count-barangkategori', [CountController::class, 'countBarangByKategori']);
 
-Route::get('/count-barangkategori', [CountController::class, 'countBarangByKategori']);
-
-Route::get('/pengguna', [PenggunaController::class, 'index']);
-Route::get('/pengguna/{id}', [PenggunaController::class, 'show']);
-Route::put('/editpengguna/{nomorinduk_pengguna}', [PenggunaController::class, 'update']);
-Route::delete('/deletepengguna/{nomorinduk_pengguna}', [PenggunaController::class, 'destroy']);
-
+    Route::get('/pengguna', [PenggunaController::class, 'index']);
+    Route::get('/pengguna/{id}', [PenggunaController::class, 'show']);
+    Route::put('/editpengguna/{nomorinduk_pengguna}', [PenggunaController::class, 'update']);
+    Route::delete('/deletepengguna/{nomorinduk_pengguna}', [PenggunaController::class, 'destroy']);
 });
