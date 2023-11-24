@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_kategori')->nullable(); // Use unsignedBigInteger for foreign keys
             $table->string('nama_barang')->index();
             $table->enum('ketersediaan_barang', ['Tersedia','Dipinjam','Pemeliharaan','Dihapuskan']);
-            $table->enum('status_barang', ['baik','rusak']);
+            $table->enum('status_barang', ['baik', 'rusak'])->unique();
             $table->string('gambar_barang', 255);
 
             $table->foreign('id_kategori')->references('id_kategori')->on('kategori_barang');

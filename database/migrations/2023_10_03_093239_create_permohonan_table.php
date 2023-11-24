@@ -36,7 +36,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_barang')->unique();
             $table->foreign('id_barang')->references('id_barang')->on('barang')->onDelete('cascade');
 
-            $table->string('nama_barang')->unique();
+            $table->string('nama_barang');
             $table->string('alasan_peminjaman', 100);
             $table->tinyInteger('jumlah_barang');
             $table->date('tanggal_peminjaman');
