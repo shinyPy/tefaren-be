@@ -13,13 +13,12 @@ class BarangController extends Controller
     public function index()
     {
         $barangList = Barang::with(['kategori:id_kategori,kategori'])
-            ->select(['id_barang', 'kode_barang', 'nomor_barang', 'id_kategori', 'nama_barang', 'ketersediaan_barang', 'status_barang', 'gambar_barang'])
+            ->select(['id_barang', 'kode_barang','id_kategori', 'nama_barang', 'ketersediaan_barang', 'status_barang', 'gambar_barang'])
             ->get()
             ->transform(function ($barang) {
                 $data = [
                     'id_barang' => $barang->id_barang,
                     'kode_barang' => $barang->kode_barang,
-                    'nomor_barang' => $barang->nomor_barang,
                     'nama_barang' => $barang->nama_barang,
                     'ketersediaan_barang' => $barang->ketersediaan_barang,
                     'status_barang' => $barang->status_barang,
@@ -79,7 +78,6 @@ class BarangController extends Controller
         $barang = new Barang([
             'id_kategori' => $id_kategori,
             'kode_barang' => $request->kode_barang,
-            'nomor_barang' => $request->nomor_barang,
             'nama_barang' => $request->nama_barang,
             'ketersediaan_barang' => $request->ketersediaan_barang,
             'status_barang' => $request->status_barang,
@@ -129,7 +127,6 @@ class BarangController extends Controller
 
         $barang->id_kategori = $id_kategori;
         $barang->kode_barang = $request->kode_barang;
-        $barang->nomor_barang = $request->nomor_barang;
         $barang->nama_barang = $request->nama_barang;
         $barang->ketersediaan_barang = $request->ketersediaan_barang;
         $barang->status_barang = $request->status_barang;
