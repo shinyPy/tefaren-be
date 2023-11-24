@@ -13,6 +13,8 @@ use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\PermohonanController;
+
 use App\Models\Kategori;
 
 /*
@@ -105,4 +107,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/pengguna/{id}', [PenggunaController::class, 'show']);
     Route::put('/editpengguna/{nomorinduk_pengguna}', [PenggunaController::class, 'update']);
     Route::delete('/deletepengguna/{nomorinduk_pengguna}', [PenggunaController::class, 'destroy']);
+
+
+Route::get('/permohonans', [PermohonanController::class, 'index']);
+Route::get('/permohonans/{id}', [PermohonanController::class, 'show']);
+Route::post('/permohonans', [PermohonanController::class, 'store']);
+Route::put('/permohonans/{id}', [PermohonanController::class, 'update']);
+Route::delete('/permohonans/{id}', [PermohonanController::class, 'destroy']);
+
 });

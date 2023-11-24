@@ -63,7 +63,6 @@ class BarangController extends Controller
         $validator = Validator::make($request->all(), [
             'kategori' => 'required|exists:kategori_barang,kategori',
             'kode_barang' => 'required|unique:barang,kode_barang|max:25',
-            'nomor_barang' => 'required|unique:barang,nomor_barang|max:25',
             'nama_barang' => 'required|max:100',
             'ketersediaan_barang' => 'required|in:Tersedia,Dipinjam,Pemeliharaan,Dihapuskan',
             'status_barang' => 'required|in:baik,rusak',
@@ -111,7 +110,6 @@ class BarangController extends Controller
         $validator = Validator::make($request->all(), [
             'kategori' => 'required|exists:kategori_barang,kategori',
             'kode_barang' => 'required|unique:barang,kode_barang,' . $id . ',id_barang|max:25',
-            'nomor_barang' => 'required|unique:barang,nomor_barang,' . $id . ',id_barang|max:25',
             'nama_barang' => 'required|max:100',
             'ketersediaan_barang' => 'required|in:Tersedia,Dipinjam,Pemeliharaan,Dihapuskan',
             'status_barang' => 'required|in:baik,rusak',
