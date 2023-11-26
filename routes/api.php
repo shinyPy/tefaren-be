@@ -56,6 +56,7 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 // });
 
 Route::get('/check-email', [PenggunaController::class, 'checkEmail']);
+Route::get('/check-nomorinduk', [PenggunaController::class, 'checkNomorInduk']);
 
 
 Route::get('/jurusan-values', [EnumFetchControllers::class, 'getJurusanValues']);
