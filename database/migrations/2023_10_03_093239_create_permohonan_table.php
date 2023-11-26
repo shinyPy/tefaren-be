@@ -33,8 +33,6 @@ return new class extends Migration
             $table->unsignedBigInteger('id_jabatan')->nullable();
             $table->foreign('id_jabatan')->references('id_jabatan')->on('pengguna')->onDelete('cascade');
 
-            $table->unsignedBigInteger('id_barang')->unique();
-            $table->foreign('id_barang')->references('id_barang')->on('barang')->onDelete('cascade');
 
             $table->string('nama_barang');
             $table->string('alasan_peminjaman', 100);

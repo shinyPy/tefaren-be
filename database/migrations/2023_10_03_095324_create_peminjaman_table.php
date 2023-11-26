@@ -18,8 +18,8 @@
                 $table->string('nomorinduk_pengguna', 15)->unique();
                 $table->foreign('nomorinduk_pengguna')->references('nomorinduk_pengguna')->on('permohonan');
                 $table->string('nama_pengguna', 100);
-                $table->string('nama_barang');
                 $table->string('kode_barang', 15)->index('kode_barang');
+                $table->string('nama_barang');
                 $table->enum('status_barang', ['baik', 'rusak']);
                 $table->enum('status_peminjaman', ['dipinjam', 'dikembalikan']);
     
