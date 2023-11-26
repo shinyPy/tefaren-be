@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Permohonan;
+use Illuminate\Support\Facades\Validator;
 
 class PermohonanController extends Controller
 {
@@ -15,8 +16,7 @@ class PermohonanController extends Controller
     public function index()
     {
         $permohonans = Permohonan::all();
-
-        return response()->json($permohonans);
+        return response()->json(['permohonan' => $permohonans]);
     }
 
     /**
@@ -27,26 +27,44 @@ class PermohonanController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        // Get the currently authenticated user
+        $user = auth()->user();
+        $validator = Validator::make($request->all(), [
             'kesetujuan_syarat' => 'required|in:setuju,tidak',
-            'nomorinduk_pengguna' => 'required|unique:permohonan|max:15',
+            'nomorinduk_pengguna' => 'required|exists:pengguna,nomorinduk_pengguna',
+            'email' => 'required|email|exists:pengguna,email',
             'nama_pengguna' => 'required|max:50',
             'tipe_pengguna' => 'required|in:siswa,guru',
-            'id_jurusan' => 'exists:pengguna,id_jurusan|nullable',
-            'kelas_pengguna' => 'required',
-            'nomor_wa' => 'required',
-            'id_jabatan' => 'exists:pengguna,id_jabatan|nullable',
-            'nama_barang' => 'required|unique:permohonan',
+            'id_jurusan' => 'nullable|exists:jurusan,id_jurusan',
+            'kelas_pengguna' => 'required|max:255',
+            'nomor_wa' => 'required|max:255',
+            'id_jabatan' => 'nullable|exists:jabatan,id_jabatan',
+            'id_barang' => 'required|exists:barang,id_barang',
+            'nama_barang' => 'required|max:255',
             'alasan_peminjaman' => 'required|max:100',
-            'jumlah_barang' => 'required|integer',
+            'jumlah_barang' => 'required|integer|min:1',
             'tanggal_peminjaman' => 'required|date',
-            'lama_peminjaman' => 'required',
+            'lama_peminjaman' => 'required|max:255',
+            'status_peminjaman' => 'required|in:tolak,terima,diajukan',
         ]);
 
-        $permohonan = Permohonan::create($request->all());
-
-        return response()->json($permohonan, 201);
+        if ($validator->fails()) {
+            return response()->json(["message" => "Invalid field", "errors" => $validator->errors()], 422);
+        }
+    
+      
+    
+        // Add the user's nomorinduk_pengguna and email to the validated data
+        $validator ['nomorinduk_pengguna'] = $user->nomorinduk_pengguna;
+        $validator ['email'] = $user->email;
+    
+        // Store the new permohonan
+        Permohonan::create($validator);
+    
+        return response()->json(['message' => 'Permohonan created successfully']);
     }
+    
+
     /**
      * Display the specified resource.
      *
@@ -56,12 +74,7 @@ class PermohonanController extends Controller
     public function show($id)
     {
         $permohonan = Permohonan::find($id);
-
-        if (!$permohonan) {
-            return response()->json(['message' => 'Permohonan not found'], 404);
-        }
-
-        return response()->json($permohonan);
+        return response()->json(['permohonan' => $permohonan]);
     }
 
     /**
@@ -74,18 +87,28 @@ class PermohonanController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            // Add validation rules based on your table structure
+            'kesetujuan_syarat' => 'required|in:setuju,tidak',
+            'nomorinduk_pengguna' => 'required|exists:pengguna,nomorinduk_pengguna',
+            'email' => 'required|email|unique:permohonan,email,' . $id,
+            'nama_pengguna' => 'required|string|max:50',
+            'tipe_pengguna' => 'required|in:siswa,guru',
+            'id_jurusan' => 'nullable|exists:jurusan,id_jurusan',
+            'kelas_pengguna' => 'required|string',
+            'nomor_wa' => 'required|string',
+            'id_jabatan' => 'nullable|exists:jabatan,id_jabatan',
+            'id_barang' => 'required|exists:barang,id_barang',
+            'nama_barang' => 'required|string|unique:permohonan,nama_barang,' . $id,
+            'alasan_peminjaman' => 'required|string|max:100',
+            'jumlah_barang' => 'required|integer',
+            'tanggal_peminjaman' => 'required|date',
+            'lama_peminjaman' => 'required|string',
+            'status_peminjaman' => 'required|in:tolak,terima,diajukan',
         ]);
 
         $permohonan = Permohonan::find($id);
-
-        if (!$permohonan) {
-            return response()->json(['message' => 'Permohonan not found'], 404);
-        }
-
         $permohonan->update($request->all());
 
-        return response()->json($permohonan);
+        return response()->json(['message' => 'Permohonan updated successfully']);
     }
 
     /**
@@ -96,14 +119,8 @@ class PermohonanController extends Controller
      */
     public function destroy($id)
     {
-        $permohonan = Permohonan::find($id);
+        Permohonan::find($id)->delete();
 
-        if (!$permohonan) {
-            return response()->json(['message' => 'Permohonan not found'], 404);
-        }
-
-        $permohonan->delete();
-
-        return response()->json(['message' => 'Permohonan deleted']);
+        return response()->json(['message' => 'Permohonan deleted successfully']);
     }
 }

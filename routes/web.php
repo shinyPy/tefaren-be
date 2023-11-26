@@ -14,7 +14,3 @@ use App\Http\Controllers\PHPMailerController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-

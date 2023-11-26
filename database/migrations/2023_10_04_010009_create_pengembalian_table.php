@@ -20,9 +20,9 @@ return new class extends Migration
             $table->foreign('nomorinduk_pengguna')->references('nomorinduk_pengguna')->on('pengguna');
 
             $table->string('nama_pengguna', 100)->unique();
-            $table->string('nomor_barang'); // Remove auto_increment from this line
+            $table->string('nama_barang');
             $table->string('kode_barang', 15)->index('kode_barang');
-            $table->enum('status_barang', ['baik','rusak'])->unique();
+            $table->enum('status_barang', ['baik','rusak']);
             $table->date('tanggal_pengembalian');
             $table->string('bukti_pengembalian', 100);
             $table->enum('status_pengembalian', ['dikembalikan', 'dicek']);
