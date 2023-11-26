@@ -28,11 +28,12 @@ class PermohonanController extends Controller
     public function store(Request $request)
     {
         // Get the currently authenticated user
-        $user = auth()->user();
+        $user = auth()->guard('api')->user();
+    
         $validator = Validator::make($request->all(), [
             'kesetujuan_syarat' => 'required|in:setuju,tidak',
-            'nomorinduk_pengguna' => 'required|exists:pengguna,nomorinduk_pengguna',
-            'email' => 'required|email|exists:pengguna,email',
+            'nomorinduk_pengguna' => 'sometimes|exists:pengguna,nomorinduk_pengguna',
+            'email' => 'sometimes|email|exists:pengguna,email',
             'nama_pengguna' => 'required|max:50',
             'tipe_pengguna' => 'required|in:siswa,guru',
             'id_jurusan' => 'nullable|exists:jurusan,id_jurusan',
@@ -47,22 +48,23 @@ class PermohonanController extends Controller
             'lama_peminjaman' => 'required|max:255',
             'status_peminjaman' => 'required|in:tolak,terima,diajukan',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json(["message" => "Invalid field", "errors" => $validator->errors()], 422);
         }
     
-      
-    
         // Add the user's nomorinduk_pengguna and email to the validated data
-        $validator ['nomorinduk_pengguna'] = $user->nomorinduk_pengguna;
-        $validator ['email'] = $user->email;
+        $validator->merge([
+            'nomorinduk_pengguna' => $user->nomorinduk_pengguna,
+            'email' => $user->email,
+        ]);
     
         // Store the new permohonan
-        Permohonan::create($validator);
+        Permohonan::create($validator->validated());
     
         return response()->json(['message' => 'Permohonan created successfully']);
     }
+    
     
 
     /**
