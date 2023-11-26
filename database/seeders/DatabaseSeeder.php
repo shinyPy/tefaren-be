@@ -25,10 +25,12 @@ class DatabaseSeeder extends Seeder
         $this->call(KategoriSeeder::class);
         // $this->call(Permohonan::class);
         Pengguna::Create([
-            'nomorinduk_pengguna' => 231,
-            'nama_pengguna' => 'Admin',
+            'nomor_induk_pengguna' => 000000000000000,
+            'nama' => 'Admin',
             'tipe_pengguna' => 'guru',
             'level_pengguna' => 'admin',
+            'id_jabatan' => null,
+            'id_jurusan' => null,
             'email' => 'admin@gmail.com',
             'password' => bcrypt('admin123'),
         ]);

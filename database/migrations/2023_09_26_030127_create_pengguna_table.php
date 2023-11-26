@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('pengguna', function (Blueprint $table) {
             $table->id('id')->primary(); // Use id() method to create auto-incrementing primary key
             $table->string('nomor_induk_pengguna', 15)->unique();
-            $table->string('nama_pengguna')->index();
+            $table->string('nama');
             $table->enum('level_pengguna', ['user', 'admin']);
             $table->enum('tipe_pengguna', ['siswa', 'guru']);
             $table->unsignedBigInteger('id_jurusan')->nullable();
