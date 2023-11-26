@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pengguna', function (Blueprint $table) {
-            $table->id('id')->primary(); // Use id() method to create auto-incrementing primary key
+            $table->id('id'); // Use id() method to create auto-incrementing primary key
             $table->string('nomor_induk_pengguna', 15)->unique();
             $table->string('nama');
             $table->enum('level_pengguna', ['user', 'admin']);
@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('password');
             $table->timestamps();
 
-            $table->foreign('id_jurusan')->references('id_jurusan')->on('jurusan')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('id_jabatan')->references('id_jabatan')->on('jabatan')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_jurusan')->references('id')->on('jurusan')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_jabatan')->references('id')->on('jabatan')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
