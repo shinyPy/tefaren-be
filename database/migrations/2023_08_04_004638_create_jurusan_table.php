@@ -12,9 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jurusan', function (Blueprint $table) {
-            $table->id('id_jurusan'); // Use id() method to create auto-incrementing primary key
-            $table->string('jurusan', 20);
-
+            $table->id('id');
+            $table->string('jurusan');
             $table->timestamps();
         });
     }
