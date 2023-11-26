@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pengguna', function (Blueprint $table) {
-            $table->id('id'); // Use id() method to create auto-incrementing primary key
+            $table->id('id')->primary(); // Use id() method to create auto-incrementing primary key
             $table->string('nomor_induk_pengguna', 15)->unique();
             $table->string('nama_pengguna')->index();
             $table->enum('level_pengguna', ['user', 'admin']);

@@ -12,7 +12,7 @@
         public function up(): void
         {
             Schema::create('peminjaman', function (Blueprint $table) {
-                $table->id('id');
+                $table->id('id')->primary();
                 $table->bigInteger('id_permohonan')->unsigned();
                 $table->foreign('id_permohonan')->references('id')->on('permohonan')->onDelete('cascade')->onUpdate('cascade');
 
