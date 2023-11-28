@@ -57,6 +57,7 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 
 Route::get('/check-email', [PenggunaController::class, 'checkEmail']);
 Route::get('/check-nomorinduk', [PenggunaController::class, 'checkNomorInduk']);
+Route::get('/barang-card', [BarangController::class, 'card']);
 
 
 Route::get('/jurusan-values', [EnumFetchControllers::class, 'getJurusanValues']);
@@ -85,7 +86,6 @@ Route::middleware('auth:api')->group(function () {
     Route::put('/edit-jabatan/{id}', [JabatanController::class, 'update']);
     Route::delete('/delete-jabatan/{id}', [JabatanController::class, 'destroy']);
 
-    Route::get('/barang-card', [BarangController::class, 'card']);
     Route::put('/barangUpdate/{id}', [BarangController::class, 'update']);
     Route::delete('/barangDelete/{id}', [BarangController::class, 'destroy']);
     Route::get('/barangShow', [BarangController::class, 'index']);
