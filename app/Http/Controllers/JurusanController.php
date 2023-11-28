@@ -34,31 +34,36 @@ class JurusanController extends Controller
     public function update(Request $request, $id): JsonResponse
     {
         $jurusan = Jurusan::find($id);
-    
+
         if (!$jurusan) {
             return response()->json(['error' => 'Jurusan tidak ditemukan'], 404);
         }
-    
+
         $request->validate([
             'jurusan' => 'required|max:20',
         ]);
-    
+
         $jurusan->update($request->all());
-    
+
         return response()->json($jurusan, 200);
     }
-    
+
     public function destroy($id): JsonResponse
     {
         $jurusan = Jurusan::find($id);
-    
+
         if (!$jurusan) {
             return response()->json(['error' => 'Jurusan tidak ditemukan'], 404);
         }
-    
+
         $jurusan->delete();
-    
+
         return response()->json(null, 204);
     }
-    
+
+    public function list()
+    {
+        $jurusan = Jurusan::all();
+        return response()->json(['success' => true, 'list' => $jurusan]);
+    }
 }

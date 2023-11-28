@@ -29,6 +29,17 @@ class Pengguna extends Model implements Authenticatable, JWTSubject
         return $this->password;
     }
 
+
+    public function jabatan()
+    {
+        return $this->belongsTo(Jabatan::class, 'id_jabatan', 'id');
+    }
+
+    public function jurusan()
+    {
+        return $this->belongsTo(Jurusan::class, 'id_jurusan', 'id');
+    }
+
     /**
      * Get the unique identifier for the user.
      *

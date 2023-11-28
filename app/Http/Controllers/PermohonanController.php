@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Permohonan;
 use Illuminate\Support\Facades\Validator;
+use PDF;
 
 class PermohonanController extends Controller
 {
@@ -13,6 +14,21 @@ class PermohonanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+    public function cetakSurat($id)
+    {
+        $permohonan = Permohonan::with('pengguna', 'pengguna.jabatan', 'pengguna.jurusan')->find($id);
+        // return view('cetak_surat_permohonan');
+
+        // return response()->json(compact('permohonan'));
+
+        // dd($permohonan);
+        $pdf = PDF::loadview('cetak_surat_permohonan', ['permohonan' => $permohonan]);
+
+        return $pdf->stream('cetak_surat_permohonan.pdf');
+    }
+
     public function index()
     {
         $permohonans = Permohonan::all();
@@ -29,7 +45,7 @@ class PermohonanController extends Controller
     {
         // Get the currently authenticated user
         $user = auth()->guard('api')->user();
-    
+
         $validator = Validator::make($request->all(), [
             'kesetujuan_syarat' => 'required|in:setuju,tidak',
             'nomorinduk_pengguna' => 'sometimes|exists:pengguna,nomorinduk_pengguna',
@@ -48,24 +64,24 @@ class PermohonanController extends Controller
             'lama_peminjaman' => 'required|max:255',
             'status_peminjaman' => 'required|in:tolak,terima,diajukan',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json(["message" => "Invalid field", "errors" => $validator->errors()], 422);
         }
-    
+
         // Add the user's nomorinduk_pengguna and email to the validated data
         $validator->merge([
             'nomorinduk_pengguna' => $user->nomorinduk_pengguna,
             'email' => $user->email,
         ]);
-    
+
         // Store the new permohonan
         Permohonan::create($validator->validated());
-    
+
         return response()->json(['message' => 'Permohonan created successfully']);
     }
-    
-    
+
+
 
     /**
      * Display the specified resource.

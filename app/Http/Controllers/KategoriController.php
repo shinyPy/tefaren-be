@@ -28,7 +28,7 @@ class KategoriController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kategori' => 'required|max:20',
+            'kategori' => 'required|',
         ]);
 
         $kategori = new Kategori([
@@ -67,7 +67,7 @@ class KategoriController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'kategori' => 'required|max:20',
+            'kategori' => 'required',
         ]);
 
         $kategori = Kategori::find($id);
@@ -99,5 +99,11 @@ class KategoriController extends Controller
         $kategori->delete();
 
         return response()->json(['message' => 'Kategori di hapus'], 200);
+    }
+
+    public function list()
+    {
+        $kategori = Kategori::all();
+        return response()->json(['success' => true, 'list' => $kategori], 200);
     }
 }

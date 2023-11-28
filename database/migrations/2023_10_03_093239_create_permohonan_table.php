@@ -19,13 +19,15 @@ return new class extends Migration
             $table->string('kelas_pengguna');
             $table->string('nomor_wa');
 
-            $table->bigInteger('id_barang')->unsigned();
-            $table->foreign('id_barang')->references('id')->on('barang')->onDelete('cascade')->onUpdate('cascade');
+            $table->longText('list_barang');
+            // $table->foreign('id_barang')->references('id')->on('barang')->onDelete('cascade')->onUpdate('cascade');
 
             $table->text('alasan_peminjaman');
             $table->integer('jumlah_barang');
             $table->date('tanggal_peminjaman');
             $table->string('lama_peminjaman');
+
+            $table->string('nomor_peminjaman');
 
             $table->text('alasan')->nullable();
 

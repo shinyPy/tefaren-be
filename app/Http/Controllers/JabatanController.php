@@ -100,4 +100,10 @@ class JabatanController extends Controller
 
         return response()->json(['message' => 'Jabatan sukses dihapus'], 200);
     }
+
+    public function list()
+    {
+        $jabatan = Jabatan::all();
+        return response()->json(['success' => true, 'list' => $jabatan]);
+    }
 }

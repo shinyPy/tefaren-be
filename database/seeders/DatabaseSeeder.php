@@ -23,16 +23,19 @@ class DatabaseSeeder extends Seeder
         $this->call(JabatanSeeder::class);
         $this->call(JurusanSeeder::class);
         $this->call(KategoriSeeder::class);
+        $this->call(BarangSeeder::class);
         // $this->call(Permohonan::class);
         Pengguna::Create([
-            'nomor_induk_pengguna' => 000000000000000,
+            'nomor_induk_pengguna' => 133713371337,
             'nama' => 'Admin',
             'tipe_pengguna' => 'guru',
             'level_pengguna' => 'admin',
-            'id_jabatan' => null,
-            'id_jurusan' => null,
+            'id_jabatan' => 1,
+            'id_jurusan' => 1,
             'email' => 'admin@gmail.com',
             'password' => bcrypt('admin123'),
         ]);
+
+        $this->call(PermohonanSeeder::class);
     }
 }
