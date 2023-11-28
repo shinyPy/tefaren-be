@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('status_barang', ['baik', 'rusak']);
             $table->string('gambar_barang', 255);
 
-            $table->foreign('id_kategori')->references('id_kategori')->on('kategori_barang');
+            $table->foreign('id_kategori')->references('id_kategori')->on('kategori_barang')->onDelete('cascade');
 
             $table->timestamps();
         });
