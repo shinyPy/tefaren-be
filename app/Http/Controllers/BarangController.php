@@ -42,6 +42,33 @@ class BarangController extends Controller
     }
 
 
+    public function card()
+{
+    $barangList = Barang::with(['kategori:id_kategori,kategori'])
+        ->select(['nama_barang', 'id_kategori', 'gambar_barang'])
+        ->get()
+        ->transform(function ($barang) {
+            $data = [
+                'nama_barang' => $barang->nama_barang,
+                'id_kategori' => $barang->id_kategori,
+                'gambar_barang' => $barang->gambar_barang,
+            ];
+
+            if ($barang->kategori !== null) {
+                $kategori = [
+                    'id_kategori' => data_get($barang->kategori, 'id_kategori'),
+                    'kategori' => data_get($barang->kategori, 'kategori'),
+                ];
+                $data['kategori'] = array_filter($kategori, fn ($value) => $value !== null);
+            } else {
+                $data['kategori'] = null;
+            }
+
+            return $data;
+        });
+
+    return response()->json($barangList);
+}
 
 
 
