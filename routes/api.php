@@ -59,6 +59,9 @@ Route::get('/check-email', [PenggunaController::class, 'checkEmail']);
 Route::get('/check-nomorinduk', [PenggunaController::class, 'checkNomorInduk']);
 Route::get('/barang-card', [BarangController::class, 'card']);
 
+Route::get('/kategori-values-ps', [JabatanValuesControllers::class, 'getKategoriValues']);
+
+
 
 Route::get('/jurusan-values', [EnumFetchControllers::class, 'getJurusanValues']);
 Route::get('/jabatan-values', [JabatanValuesControllers::class, 'getJabatanValues']);

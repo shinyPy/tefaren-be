@@ -28,18 +28,18 @@ class KategoriController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kategori' => 'required|max:20',
+            'kategori' => 'required|max:20|unique:kategori_barang,kategori',
         ]);
-
+    
         $kategori = new Kategori([
             'kategori' => $request->get('kategori'),
         ]);
-
+    
         $kategori->save();
-
+    
         return response()->json(['kategori' => $kategori], 201);
     }
-
+    
     /**
      * Display the specified resource.
      *
