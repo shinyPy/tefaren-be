@@ -19,7 +19,7 @@ class PermohonanSeeder extends Seeder
             'id_pengguna' => 1,
             'kelas_pengguna' => 'XII',
             'nomor_wa' => "081378327060",
-            'list_barang' => json_encode(array(
+            'details_barang' => json_encode(array(
                 array('id' => 1),
                 array('id' => 2)
             )),

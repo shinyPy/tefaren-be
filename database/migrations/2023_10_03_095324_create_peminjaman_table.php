@@ -9,15 +9,20 @@
         /**
          * Run the migrations.
          */
-        public function up(): void
+        public function up()
         {
             Schema::create('peminjaman', function (Blueprint $table) {
-                $table->id('id');
+                $table->id('id_peminjaman');
                 $table->bigInteger('id_permohonan')->unsigned();
                 $table->foreign('id_permohonan')->references('id')->on('permohonan')->onDelete('cascade')->onUpdate('cascade');
-
-                $table->enum('status_barang', ['baik', 'rusak']);
+    
+                $table->bigInteger('id_barang')->unsigned();
+                $table->foreign('id_barang')->references('id_barang')->on('barang')->onDelete('cascade')->onUpdate('cascade');
+    
                 $table->enum('status_peminjaman', ['dipinjam', 'dikembalikan']);
+                // Add any other columns you need for Peminjaman
+    
+                $table->timestamps();
             });
         }
 

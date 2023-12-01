@@ -21,5 +21,9 @@ class Barang extends Model
         return $this->belongsTo(Kategori::class, 'id_kategori', 'id_kategori');
     }
 
+    public function permohonan()
+    {
+        return $this->belongsTo(Permohonan::class, 'id_barang');
+    }
   
 }

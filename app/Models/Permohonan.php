@@ -15,13 +15,14 @@ class Permohonan extends Model
         'id_pengguna',
         'kelas_pengguna',
         'nomor_wa',
-        'list_barang',
+        'details_barang',
         'alasan_peminjaman',
         'jumlah_barang',
         'tanggal_peminjaman',
         'lama_peminjaman',
         'status_peminjaman',
     ];
+    protected $primaryKey = 'id';
 
     public function pengguna()
     {
@@ -30,11 +31,16 @@ class Permohonan extends Model
 
     public function jurusan()
     {
-        return $this->belongsTo(Jurusan::class, 'id_jurusan', 'id');
+        return $this->belongsTo(Jurusan::class, 'id_jurusan', 'id_jurusan');
+    }
+
+    public function barangDetails()
+    {
+        return $this->hasMany(Barang::class, 'id_barang');
     }
 
     public function jabatan()
     {
-        return $this->belongsTo(Jabatan::class, 'id_jabatan', 'id');
+        return $this->belongsTo(Jabatan::class, 'id_jabatan', 'id_jabatan');
     }
 }

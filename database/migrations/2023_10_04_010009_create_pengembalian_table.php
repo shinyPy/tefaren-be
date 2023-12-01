@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id('id');
 
             $table->bigInteger('id_peminjaman')->unsigned();
-            $table->foreign('id_peminjaman')->references('id')->on('peminjaman')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_peminjaman')->references('id_peminjaman')->on('peminjaman')->onDelete('cascade')->onUpdate('cascade');
 
             $table->enum('status_barang', ['baik', 'rusak']);
-            $table->date('tanggal_pengembalian');
             $table->text('bukti_pengembalian');
             $table->enum('status_pengembalian', ['dikembalikan', 'dicek']);
 

@@ -12,6 +12,7 @@ use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PermohonanController;
+use App\Http\Controllers\PeminjamanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,8 @@ Route::get('/kategori-values-ps', [JabatanValuesControllers::class, 'getKategori
 
 Route::get('/jurusan-values', [EnumFetchControllers::class, 'getJurusanValues']);
 Route::get('/jabatan-values', [JabatanValuesControllers::class, 'getJabatanValues']);
+Route::get('/barang-card', [BarangController::class, 'card']);
+
 
 Route::middleware('JWTAuthentication')->group(function () {
     Route::get('/check-token', [AuthController::class, 'checkToken']);
@@ -89,12 +92,13 @@ Route::middleware('JWTAuthentication')->group(function () {
 
 
     // Users
-
+    Route::put('/edit-peminjaman/{id}', [PeminjamanController::class, 'update']);
 
     Route::post('/add-permohonan', [PermohonanController::class, 'store']);
+    Route::put('/edit-permohonan/{id}', [PermohonanController::class, 'update']);
+    Route::delete('/delete-permohonan/{id}', [PermohonanController::class, 'destroy']);
 
-    Route::get('/permohonans', [PermohonanController::class, 'index']);
+
+    Route::get('/show-permohonan', [PermohonanController::class, 'index']);
     Route::get('/permohonans/{id}', [PermohonanController::class, 'show']);
-    Route::put('/permohonans/{id}', [PermohonanController::class, 'update']);
-    Route::delete('/permohonans/{id}', [PermohonanController::class, 'destroy']);
 });

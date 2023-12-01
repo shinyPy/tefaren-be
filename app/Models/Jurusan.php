@@ -9,6 +9,7 @@ class Jurusan extends Model
 {
     protected $table = 'jurusan';
     protected $fillable = ['jurusan'];
+    protected $primaryKey = 'id_jurusan';
 
     use HasFactory;
     public function pengguna()

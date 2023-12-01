@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('kelas_pengguna');
             $table->string('nomor_wa');
 
-            $table->longText('list_barang');
+            $table->longText('details_barang');
             // $table->foreign('id_barang')->references('id')->on('barang')->onDelete('cascade')->onUpdate('cascade');
 
             $table->text('alasan_peminjaman');
