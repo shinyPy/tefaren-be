@@ -26,17 +26,22 @@ use App\Http\Controllers\PermohonanController;
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::get('/check-nomorinduk', [PenggunaController::class, 'checkNomorInduk']);
 
 Route::get('/check-email', [PenggunaController::class, 'checkEmail']);
 
+Route::get('/kategori-values-ps', [JabatanValuesControllers::class, 'getKategoriValues']);
 
 Route::get('/jurusan-values', [EnumFetchControllers::class, 'getJurusanValues']);
 Route::get('/jabatan-values', [JabatanValuesControllers::class, 'getJabatanValues']);
 
 Route::middleware('JWTAuthentication')->group(function () {
     Route::get('/check-token', [AuthController::class, 'checkToken']);
-
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
     Route::middleware('AdminCheck')->group(function () {
+        Route::get('/kategori-values', [KategoriController::class, 'getKategoriValues']);
         Route::get('/list-kategori', [KategoriController::class, 'list']);
         Route::get('/get-kategori', [KategoriController::class, 'index']);
         Route::post('/add-kategori', [KategoriController::class, 'store']);

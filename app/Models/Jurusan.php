@@ -13,6 +13,6 @@ class Jurusan extends Model
     use HasFactory;
     public function pengguna()
     {
-        return $this->hasMany(Pengguna::class, 'id_jabatan', 'id');
+        return $this->hasMany(Pengguna::class, 'id_jurusan', 'id_jurusan');
     }
 }

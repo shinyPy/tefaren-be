@@ -42,7 +42,6 @@
 
 <body>
 
-    <?php echo 'ini woi'; ?>
 
     <?php
     
@@ -110,12 +109,12 @@
                 <tr>
                     <td style="padding-bottom: 3%;">Nama</td>
                     <td style="padding-bottom: 3%;">:</td>
-                    <td style="padding-bottom: 3%;">&nbsp;<?= $permohonan['pengguna']['nama'] ?></td>
+                    <td style="padding-bottom: 3%;">&nbsp;<?= $permohonan['pengguna']['nama_pengguna'] ?></td>
                 </tr>
                 <tr>
                     <td style="padding-bottom: 3%;">NIS</td>
                     <td style="padding-bottom: 3%;">:</td>
-                    <td style="padding-bottom: 3%;">&nbsp;<?= $permohonan['pengguna']['nomor_induk_pengguna'] ?></td>
+                    <td style="padding-bottom: 3%;">&nbsp;<?= $permohonan['pengguna']['nomorinduk_pengguna'] ?></td>
                 </tr>
                 <tr>
                     <td style="padding-bottom: 3%;">Kelas</td>

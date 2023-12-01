@@ -56,7 +56,7 @@ class PermohonanController extends Controller
             'kelas_pengguna' => 'required|max:255',
             'nomor_wa' => 'required|max:255',
             'id_jabatan' => 'nullable|exists:jabatan,id_jabatan',
-            'id_barang' => 'required|exists:barang,id_barang',
+            'id_barang' => 'required|exists:barang,id',
             'nama_barang' => 'required|max:255',
             'alasan_peminjaman' => 'required|max:100',
             'jumlah_barang' => 'required|integer|min:1',

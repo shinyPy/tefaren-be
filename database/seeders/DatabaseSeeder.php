@@ -26,8 +26,8 @@ class DatabaseSeeder extends Seeder
         $this->call(BarangSeeder::class);
         // $this->call(Permohonan::class);
         Pengguna::Create([
-            'nomor_induk_pengguna' => 133713371337,
-            'nama' => 'Admin',
+            'nomorinduk_pengguna' => 133713371337,
+            'nama_pengguna' => 'Admin',
             'tipe_pengguna' => 'guru',
             'level_pengguna' => 'admin',
             'id_jabatan' => 1,
