@@ -39,12 +39,14 @@ class PermohonanController extends Controller
      }
      
 
-    public function index()
-    {
-        $permohonans = Permohonan::all();
-        return response()->json(['permohonan' => $permohonans]);
-    }
-
+     public function index()
+     {
+         // Eager load the related pengguna information
+         $permohonans = Permohonan::with('pengguna')->get();
+     
+         return response()->json(['permohonan' => $permohonans]);
+     }
+     
     /**
      * Store a newly created resource in storage.
      *
@@ -185,7 +187,6 @@ class PermohonanController extends Controller
             return response()->json(['message' => 'Invalid details_barang format'], 422);
         }
     }
-    
     
     
 

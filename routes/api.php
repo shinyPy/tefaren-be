@@ -100,5 +100,4 @@ Route::middleware('JWTAuthentication')->group(function () {
 
 
     Route::get('/show-permohonan', [PermohonanController::class, 'index']);
-    Route::get('/permohonans/{id}', [PermohonanController::class, 'show']);
 });

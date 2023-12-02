@@ -78,7 +78,6 @@ class PeminjamanController extends Controller
                     // Create a new Pengembalian record
                     $pengembalian = new Pengembalian([
                         'status_barang' => $barang->status_barang,
-                        'tanggal_pengembalian' => today(),
                         'bukti_pengembalian' => 'your_bukti_pengembalian_value',
                         'status_pengembalian' => 'dicek',
                     ]);
