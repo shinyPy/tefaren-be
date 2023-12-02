@@ -93,6 +93,7 @@ Route::middleware('JWTAuthentication')->group(function () {
 
     // Users
     Route::put('/edit-peminjaman/{id}', [PeminjamanController::class, 'update']);
+    Route::get('/show-peminjaman', [PeminjamanController::class, 'index']);
 
     Route::post('/add-permohonan', [PermohonanController::class, 'store']);
     Route::put('/edit-permohonan/{id}', [PermohonanController::class, 'update']);

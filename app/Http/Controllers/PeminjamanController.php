@@ -13,6 +13,24 @@ use App\Models\Pengembalian; // Import the Peminjaman model
 use App\Models\Barang;
 class PeminjamanController extends Controller
 {
+
+
+    public function index()
+    {
+        try {
+            // Eager load the related permohonan and barang information
+            $peminjamans = Peminjaman::with(['permohonan:id,status_permohonan', 'barang:id_barang,nama_barang'])
+                ->select('id_peminjaman', 'id_permohonan', 'id_barang', 'status_peminjaman', 'created_at', 'updated_at')
+                ->get();
+
+            return response()->json($peminjamans);
+        } catch (\Exception $e) {
+            // Handle exceptions as needed
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    
     public function update(Request $request, $id)
     {
         Log::info('Updating Peminjaman. ID: ' . $id);

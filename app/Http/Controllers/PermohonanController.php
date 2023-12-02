@@ -142,11 +142,24 @@ class PermohonanController extends Controller
             if ($response->getStatusCode() !== 200) {
                 return $response;
             }
+        } elseif ($originalStatus !== 'tolak' && $permohonan->status_permohonan === 'tolak') {
+            // Log to help identify the issue
+            Log::info('Status changed to tolak. Deleting related Peminjaman for Permohonan ID: ' . $id);
+    
+            // Delete related Peminjaman data
+            $this->deletePeminjaman($permohonan);
+    
+            Log::info('Related Peminjaman deleted successfully for Permohonan ID: ' . $id);
         }
     
         return response()->json(['message' => 'Permohonan updated successfully', 'data' => $permohonan]);
     }
     
+    private function deletePeminjaman(Permohonan $permohonan)
+    {
+        // Delete related Peminjaman data
+        Peminjaman::where('id_permohonan', $permohonan->id)->delete();
+    }
     
     private function processBarang(Permohonan $permohonan)
     {

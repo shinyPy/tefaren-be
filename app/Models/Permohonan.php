@@ -26,6 +26,8 @@ class Permohonan extends Model
     {
         return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id');
     }
+
+    
     
 
     public function jurusan()

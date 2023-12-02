@@ -24,5 +24,16 @@ class Peminjaman extends Model
     return $this->hasOne(Pengembalian::class, 'id_peminjaman');
 }
 
+public function permohonan()
+{
+    return $this->belongsTo(Permohonan::class, 'id_permohonan');
+}
+
+public function barang()
+{
+    return $this->belongsTo(Barang::class, 'id_barang');
+}
+
+
 
 }
