@@ -18,17 +18,22 @@ class PeminjamanController extends Controller
     public function index()
     {
         try {
-            // Eager load the related permohonan and barang information
-            $peminjamans = Peminjaman::with(['permohonan:id,status_permohonan', 'barang:id_barang,nama_barang'])
-                ->select('id_peminjaman', 'id_permohonan', 'id_barang', 'status_peminjaman', 'created_at', 'updated_at')
+            // Eager load the related permohonan, barang, and pengguna information
+            $peminjamans = Peminjaman::with([
+                'permohonan:id,id_pengguna,status_permohonan,nomor_wa,alasan_peminjaman,tanggal_peminjaman,lama_peminjaman,nomor_peminjaman',
+                'permohonan.pengguna:id,nomorinduk_pengguna,nama_pengguna,level_pengguna,tipe_pengguna,email',
+                'barang:id_barang,nama_barang'
+            ])->select('id_peminjaman', 'id_permohonan', 'id_barang', 'status_peminjaman', 'created_at', 'updated_at')
                 ->get();
-
+    
             return response()->json($peminjamans);
         } catch (\Exception $e) {
             // Handle exceptions as needed
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    
+    
 
     
     public function update(Request $request, $id)
