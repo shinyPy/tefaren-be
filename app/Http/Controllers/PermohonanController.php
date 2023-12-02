@@ -148,12 +148,33 @@ class PermohonanController extends Controller
     
             // Delete related Peminjaman data
             $this->deletePeminjaman($permohonan);
-    
+            $this->updateBarangKetersediaan($permohonan);
+
             Log::info('Related Peminjaman deleted successfully for Permohonan ID: ' . $id);
         }
     
         return response()->json(['message' => 'Permohonan updated successfully', 'data' => $permohonan]);
     }
+
+    private function updateBarangKetersediaan(Permohonan $permohonan)
+{
+    // Retrieve details_barang as an array of IDs
+    $detailsBarang = json_decode($permohonan->details_barang);
+
+    if (is_array($detailsBarang)) {
+        foreach ($detailsBarang as $barangDetail) {
+            // Get the actual Barang model
+            $barangId = $barangDetail->id;
+            $barang = Barang::find($barangId);
+
+            if ($barang) {
+                // Update barang status to "Tersedia"
+                $barang->ketersediaan_barang = 'Tersedia';
+                $barang->save();
+            }
+        }
+    }
+}
     
     private function deletePeminjaman(Permohonan $permohonan)
     {
