@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Log;
 use App\Models\Peminjaman; // Import the Peminjaman model
 use App\Models\Barang;
+use Illuminate\Database\Eloquent\Builder;
 
 use PDF;
 use App\Models\Pengguna;
@@ -60,6 +61,15 @@ class PermohonanController extends Controller
      */
     public function store(Request $request)
     {
+
+        $existingDiajukanPermohonan = Permohonan::where('id_pengguna', $request->input('id_pengguna'))
+        ->where('status_permohonan', 'diajukan')
+        ->first();
+
+    if ($existingDiajukanPermohonan) {
+        return response()->json(['message' => 'Kamu telah mensubmit lebih dari satu kali, tunggu admin mencek permohonanmu.'], 422);
+    }
+
         $validator = Validator::make($request->all(), [
             'id_pengguna' => 'required|exists:pengguna,id',
             'nomor_wa' => 'required|string',
@@ -108,12 +118,23 @@ class PermohonanController extends Controller
     
         $validator = Validator::make($request->all(), [
             'status_permohonan' => 'required|in:diajukan,tolak,terima',
-            // 'nomor_peminjaman' => 'required|string', // Remove this line
         ]);
     
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
+    
+        // Check if the user has already submitted a permohonan with status_permohonan 'diajukan'
+        $existingPermohonan = Permohonan::where('id_pengguna', $request->user()->id)
+            ->where('status_permohonan', 'diajukan')
+            ->where('id', '!=', $id) // Exclude the current permohonan being updated
+            ->first();
+    
+        if ($existingPermohonan && $request->input('status_permohonan') === 'diajukan') {
+            return response()->json(['message' => 'You have already submitted a permohonan with status "diajukan".'], 422);
+        }
+    
+        // Continue with the rest of the update logic
     
         // Retrieve the Permohonan instance using the provided ID
         $permohonan = Permohonan::findOrFail($id);
@@ -149,12 +170,13 @@ class PermohonanController extends Controller
             // Delete related Peminjaman data
             $this->deletePeminjaman($permohonan);
             $this->updateBarangKetersediaan($permohonan);
-
+    
             Log::info('Related Peminjaman deleted successfully for Permohonan ID: ' . $id);
         }
     
         return response()->json(['message' => 'Permohonan updated successfully', 'data' => $permohonan]);
     }
+    
 
     private function updateBarangKetersediaan(Permohonan $permohonan)
 {
