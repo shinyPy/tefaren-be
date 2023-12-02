@@ -16,7 +16,6 @@ return new class extends Migration
             $table->enum('kesetujuan_syarat', ['setuju', 'tidak']);
             $table->bigInteger('id_pengguna')->unsigned();
             $table->foreign('id_pengguna')->references('id')->on('pengguna')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('kelas_pengguna');
             $table->string('nomor_wa');
 
             $table->longText('details_barang');

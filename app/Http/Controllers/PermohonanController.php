@@ -63,10 +63,8 @@ class PermohonanController extends Controller
         $validator = Validator::make($request->all(), [
             'kesetujuan_syarat' => 'required|in:setuju,tidak',
             'id_pengguna' => 'required|exists:pengguna,id',
-            'kelas_pengguna' => 'required|string',
             'nomor_wa' => 'required|string',
             'alasan_peminjaman' => 'required|string',
-            'jumlah_barang' => 'required|integer',
             'tanggal_peminjaman' => 'required|date',
             'lama_peminjaman' => 'required|string',
             'nomor_peminjaman' => 'sometimes|string',
@@ -93,10 +91,8 @@ class PermohonanController extends Controller
         $permohonan = new Permohonan();
         $permohonan->kesetujuan_syarat = $request->input('kesetujuan_syarat');
         $permohonan->id_pengguna = $request->input('id_pengguna');
-        $permohonan->kelas_pengguna = $request->input('kelas_pengguna');
         $permohonan->nomor_wa = $request->input('nomor_wa');
         $permohonan->alasan_peminjaman = $request->input('alasan_peminjaman');
-        $permohonan->jumlah_barang = $request->input('jumlah_barang');
         $permohonan->tanggal_peminjaman = $request->input('tanggal_peminjaman');
         $permohonan->lama_peminjaman = $request->input('lama_peminjaman');
         $permohonan->nomor_peminjaman = $request->input('nomor_peminjaman');
