@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('nomor_peminjaman')->nullable();
 
 
-            $table->enum('status_permohonan', ['tolak', 'terima', 'diajukan']);
+            $table->enum('status_permohonan', ['diajukan','tolak', 'terima']);
 
             $table->timestamps();
         });

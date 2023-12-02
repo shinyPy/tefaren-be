@@ -67,7 +67,6 @@ class PermohonanController extends Controller
             'alasan_peminjaman' => 'required|string',
             'tanggal_peminjaman' => 'required|date',
             'lama_peminjaman' => 'required|string',
-            'nomor_peminjaman' => 'sometimes|string',
             'details_barang' => 'required|array',
             'details_barang.*' => ['required', 'exists:barang,id_barang'],
         ]);
@@ -95,7 +94,6 @@ class PermohonanController extends Controller
         $permohonan->alasan_peminjaman = $request->input('alasan_peminjaman');
         $permohonan->tanggal_peminjaman = $request->input('tanggal_peminjaman');
         $permohonan->lama_peminjaman = $request->input('lama_peminjaman');
-        $permohonan->nomor_peminjaman = $request->input('nomor_peminjaman');
     
         // Convert details_barang to a JSON string and set it on the model
         $permohonan->details_barang = json_encode($detailsBarangObjects);
@@ -112,7 +110,7 @@ class PermohonanController extends Controller
     
         $validator = Validator::make($request->all(), [
             'status_permohonan' => 'required|in:diajukan,tolak,terima',
-            'nomor_peminjaman' => 'required|string', // Add this line for nomor_peminjaman
+            // 'nomor_peminjaman' => 'required|string', // Remove this line
         ]);
     
         if ($validator->fails()) {
@@ -125,9 +123,11 @@ class PermohonanController extends Controller
         // Get the original status_permohonan value
         $originalStatus = $permohonan->status_permohonan;
     
-        // Manually set the status_permohonan and nomor_peminjaman attributes
+        // Manually set the status_permohonan attribute
         $permohonan->status_permohonan = $request->input('status_permohonan');
-        $permohonan->nomor_peminjaman = $request->input('nomor_peminjaman');
+    
+        // Automatically generate and set a unique nomor_peminjaman
+        $permohonan->nomor_peminjaman = 'PM' . now()->timestamp; // Adjust the prefix as needed
     
         // Save the Permohonan instance
         $saved = $permohonan->save();
@@ -148,6 +148,7 @@ class PermohonanController extends Controller
     
         return response()->json(['message' => 'Permohonan updated successfully', 'data' => $permohonan]);
     }
+    
     
     private function processBarang(Permohonan $permohonan)
     {
