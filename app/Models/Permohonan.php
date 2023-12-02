@@ -28,6 +28,7 @@ class Permohonan extends Model
     {
         return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id');
     }
+    
 
     public function jurusan()
     {
@@ -43,4 +44,14 @@ class Permohonan extends Model
     {
         return $this->belongsTo(Jabatan::class, 'id_jabatan', 'id_jabatan');
     }
+
+    public function getBarangDetailsAttribute()
+    {
+        $details = json_decode($this->attributes['details_barang']);
+        $barangIds = collect($details)->pluck('id');
+        $barangs = Barang::whereIn('id_barang', $barangIds)->get();
+
+        return $barangs;
+    }
+    
 }

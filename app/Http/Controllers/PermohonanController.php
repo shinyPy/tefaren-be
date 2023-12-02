@@ -41,8 +41,13 @@ class PermohonanController extends Controller
 
      public function index()
      {
-         // Eager load the related pengguna information
          $permohonans = Permohonan::with('pengguna')->get();
+         
+         // Fetch barang details for each permohonan
+         $permohonans->each(function ($permohonan) {
+             $barangDetails = $permohonan->barangDetails;
+             $permohonan->barang_details = $barangDetails;
+         });
      
          return response()->json($permohonans);
      }
@@ -64,7 +69,7 @@ class PermohonanController extends Controller
             'jumlah_barang' => 'required|integer',
             'tanggal_peminjaman' => 'required|date',
             'lama_peminjaman' => 'required|string',
-            'nomor_peminjaman' => 'required|string',
+            'nomor_peminjaman' => 'sometimes|string',
             'details_barang' => 'required|array',
             'details_barang.*' => ['required', 'exists:barang,id_barang'],
         ]);
@@ -111,6 +116,7 @@ class PermohonanController extends Controller
     
         $validator = Validator::make($request->all(), [
             'status_permohonan' => 'required|in:diajukan,tolak,terima',
+            'nomor_peminjaman' => 'required|string', // Add this line for nomor_peminjaman
         ]);
     
         if ($validator->fails()) {
@@ -123,8 +129,9 @@ class PermohonanController extends Controller
         // Get the original status_permohonan value
         $originalStatus = $permohonan->status_permohonan;
     
-        // Manually set the status_permohonan attribute
+        // Manually set the status_permohonan and nomor_peminjaman attributes
         $permohonan->status_permohonan = $request->input('status_permohonan');
+        $permohonan->nomor_peminjaman = $request->input('nomor_peminjaman');
     
         // Save the Permohonan instance
         $saved = $permohonan->save();

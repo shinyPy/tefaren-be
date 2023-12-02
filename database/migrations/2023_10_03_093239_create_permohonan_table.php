@@ -23,13 +23,11 @@ return new class extends Migration
             // $table->foreign('id_barang')->references('id')->on('barang')->onDelete('cascade')->onUpdate('cascade');
 
             $table->text('alasan_peminjaman');
-            $table->integer('jumlah_barang');
             $table->date('tanggal_peminjaman');
             $table->string('lama_peminjaman');
 
-            $table->string('nomor_peminjaman');
+            $table->string('nomor_peminjaman')->nullable();
 
-            $table->text('alasan')->nullable();
 
             $table->enum('status_permohonan', ['tolak', 'terima', 'diajukan']);
 

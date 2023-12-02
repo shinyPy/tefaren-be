@@ -24,10 +24,8 @@ class PermohonanSeeder extends Seeder
                 array('id' => 2)
             )),
             'alasan_peminjaman' => 'saya tidak tau yang mulia',
-            'jumlah_barang' => 2,
             'tanggal_peminjaman' => '2006-07-05',
             'lama_peminjaman' => 'tidak tau yang mulia',
-            'alasan' => 'belum pasti',
             'status_permohonan' => 'diajukan',
             'nomor_peminjaman' => '3862',
         ]);
