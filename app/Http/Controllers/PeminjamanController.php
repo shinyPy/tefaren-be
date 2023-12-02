@@ -19,6 +19,7 @@ class PeminjamanController extends Controller
     
         $validator = Validator::make($request->all(), [
             'status_peminjaman' => 'required|in:dipinjam,dikembalikan',
+            'bukti_pengembalian' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // adjust validation as needed
         ]);
     
         if ($validator->fails()) {
@@ -43,7 +44,7 @@ class PeminjamanController extends Controller
             Log::info('Status changed to dikembalikan. ID: ' . $id);
     
             // Process pengembalian related to the peminjaman
-            $response = $this->processPengembalian($peminjaman);
+            $response = $this->processPengembalian($peminjaman, $request->file('bukti_pengembalian'));
     
             // If there is an error in the response, return it
             if ($response->getStatusCode() !== 200) {
@@ -54,7 +55,8 @@ class PeminjamanController extends Controller
         return response()->json(['message' => 'Peminjaman updated successfully', 'data' => $peminjaman]);
     }
     
-    private function processPengembalian(Peminjaman $peminjaman)
+    
+    private function processPengembalian(Peminjaman $peminjaman, $buktiPengembalian)
     {
         // Retrieve the corresponding Barang
         $barang = Barang::find($peminjaman->id_barang);
@@ -75,10 +77,13 @@ class PeminjamanController extends Controller
                     // Log some additional information for debugging
                     Log::info('ID Pengembalian before creating: ' . $peminjaman->id);
     
+                    // Save the image to storage (you may need to adjust this based on your storage setup)
+                    $imagePath = $buktiPengembalian->store('bukti_pengembalian', 'public');
+    
                     // Create a new Pengembalian record
                     $pengembalian = new Pengembalian([
                         'status_barang' => $barang->status_barang,
-                        'bukti_pengembalian' => 'your_bukti_pengembalian_value',
+                        'bukti_pengembalian' => $imagePath, // Store the image path in the database
                         'status_pengembalian' => 'dicek',
                     ]);
     
@@ -100,7 +105,6 @@ class PeminjamanController extends Controller
             Log::info('Peminjaman is not in "dikembalikan" status. Skipping Pengembalian process for Peminjaman ID: ' . $peminjaman->id);
         }
     }
-    
     
     
     

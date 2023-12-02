@@ -44,7 +44,7 @@ class PermohonanController extends Controller
          // Eager load the related pengguna information
          $permohonans = Permohonan::with('pengguna')->get();
      
-         return response()->json(['permohonan' => $permohonans]);
+         return response()->json($permohonans);
      }
      
     /**
