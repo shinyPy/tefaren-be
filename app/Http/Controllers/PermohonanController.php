@@ -61,7 +61,6 @@ class PermohonanController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'kesetujuan_syarat' => 'required|in:setuju,tidak',
             'id_pengguna' => 'required|exists:pengguna,id',
             'nomor_wa' => 'required|string',
             'alasan_peminjaman' => 'required|string',
@@ -88,7 +87,6 @@ class PermohonanController extends Controller
     
         // Create a new Permohonan instance
         $permohonan = new Permohonan();
-        $permohonan->kesetujuan_syarat = $request->input('kesetujuan_syarat');
         $permohonan->id_pengguna = $request->input('id_pengguna');
         $permohonan->nomor_wa = $request->input('nomor_wa');
         $permohonan->alasan_peminjaman = $request->input('alasan_peminjaman');

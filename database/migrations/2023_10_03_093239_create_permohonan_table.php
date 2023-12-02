@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('permohonan', function (Blueprint $table) {
             $table->id('id');
-            $table->enum('kesetujuan_syarat', ['setuju', 'tidak']);
             $table->bigInteger('id_pengguna')->unsigned();
             $table->foreign('id_pengguna')->references('id')->on('pengguna')->onDelete('cascade')->onUpdate('cascade');
             $table->string('nomor_wa');

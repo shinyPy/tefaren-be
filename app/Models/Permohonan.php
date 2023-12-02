@@ -11,13 +11,11 @@ class Permohonan extends Model
     protected $table = 'permohonan'; // Specify the table name explicitly
     protected $fillable = [
         'nomor_peminjaman',
-        'kesetujuan_syarat',
         'id_pengguna',
         'kelas_pengguna',
         'nomor_wa',
         'details_barang',
         'alasan_peminjaman',
-        'jumlah_barang',
         'tanggal_peminjaman',
         'lama_peminjaman',
         'status_peminjaman',
@@ -53,5 +51,5 @@ class Permohonan extends Model
 
         return $barangs;
     }
-    
+
 }
