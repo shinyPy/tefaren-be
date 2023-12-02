@@ -28,17 +28,21 @@ class JabatanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'jabatan' => 'required|max:20',
+            'jabatan' => 'required|max:20|unique:jabatan,jabatan', // Add 'unique' validation rule
+        ], [
+            'jabatan.unique' => 'Jabatan sama dengan yang di tabel',
         ]);
-
+    
         $jabatan = new Jabatan([
             'jabatan' => $request->get('jabatan'),
         ]);
-
+    
         $jabatan->save();
-
+    
         return response()->json(['jabatan' => $jabatan], 201);
     }
+    
+    
 
     /**
      * Display the specified resource.
@@ -67,7 +71,9 @@ class JabatanController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'jabatan' => 'required|max:20',
+            'jabatan' => 'required|max:20|unique:jabatan,jabatan', // Add 'unique' validation rule
+        ], [
+            'jabatan.unique' => 'Jabatan sama dengan yang di tabel',
         ]);
 
         $jabatan = Jabatan::find($id);
