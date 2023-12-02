@@ -29,6 +29,8 @@ class KategoriController extends Controller
     {
         $request->validate([
             'kategori' => 'required|max:20|unique:kategori_barang,kategori',
+        ], [
+            'kategori.unique' => 'Kategori sama dengan yang di tabel',
         ]);
     
         $kategori = new Kategori([
