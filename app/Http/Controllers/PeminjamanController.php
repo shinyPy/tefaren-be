@@ -11,6 +11,8 @@ use App\Models\Peminjaman; // Import the Peminjaman model
 use App\Models\Pengembalian; // Import the Peminjaman model
 
 use App\Models\Barang;
+use App\Models\Pengguna;
+
 class PeminjamanController extends Controller
 {
 
@@ -22,7 +24,7 @@ class PeminjamanController extends Controller
             $peminjamans = Peminjaman::with([
                 'permohonan:id,id_pengguna,status_permohonan,nomor_wa,alasan_peminjaman,tanggal_peminjaman,lama_peminjaman,nomor_peminjaman',
                 'permohonan.pengguna:id,nomorinduk_pengguna,nama_pengguna,level_pengguna,tipe_pengguna,email',
-                'barang:id_barang,nama_barang'
+                'barang:id_barang,kode_barang,nama_barang'
             ])->select('id_peminjaman', 'id_permohonan', 'id_barang', 'status_peminjaman', 'created_at', 'updated_at')
                 ->get();
     
@@ -77,6 +79,74 @@ class PeminjamanController extends Controller
     
         return response()->json(['message' => 'Peminjaman updated successfully', 'data' => $peminjaman]);
     }
+
+    public function updatePengembalian(Request $request, $id)
+    {
+        Log::info('Updating Pengembalian. ID: ' . $id);
+    
+        $validator = Validator::make($request->all(), [
+            'status_pengembalian' => 'required|in:dicek,dikembalikan',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+    
+        // Retrieve the Pengembalian instance using the provided ID
+        $pengembalian = Pengembalian::findOrFail($id);
+    
+        // Get the original status_pengembalian value
+        $originalStatus = $pengembalian->status_pengembalian;
+    
+        // Manually set the status_pengembalian attribute
+        $pengembalian->status_pengembalian = $request->input('status_pengembalian');
+    
+        // Save the Pengembalian instance
+        $saved = $pengembalian->save();
+    
+        // Check if status_pengembalian has changed to "dikembalikan"
+        if ($originalStatus !== 'dikembalikan' && $pengembalian->status_pengembalian === 'dikembalikan') {
+            // Log to help identify the issue
+            Log::info('Status changed to dikembalikan. ID: ' . $id);
+    
+            // Process updating Barang ketersediaan
+            $response = $this->updateBarangKetersediaan($pengembalian);
+    
+            // If there is an error in the response, return it
+            if ($response->getStatusCode() !== 200) {
+                return $response;
+            }
+        }
+    
+        return response()->json(['message' => 'Pengembalian updated successfully', 'data' => $pengembalian]);
+    }
+    
+    private function updateBarangKetersediaan(Pengembalian $pengembalian)
+    {
+        // Retrieve the corresponding Peminjaman
+        $peminjaman = Peminjaman::find($pengembalian->id_peminjaman);
+    
+        if ($peminjaman) {
+            // Retrieve the corresponding Barang
+            $barang = Barang::find($peminjaman->id_barang);
+    
+            if ($barang) {
+                // Update ketersediaan_barang in the Barang table to 'Tersedia'
+                $barang->update(['ketersediaan_barang' => 'Tersedia']);
+    
+                Log::info('Ketersediaan Barang updated successfully for Pengembalian ID: ' . $pengembalian->id);
+                return response()->json(['message' => 'Ketersediaan Barang updated successfully']);
+            } else {
+                Log::error('Barang not found for Peminjaman ID: ' . $peminjaman->id_barang);
+                return response()->json(['message' => 'Barang not found'], 404);
+            }
+        } else {
+            Log::error('Peminjaman not found for Pengembalian ID: ' . $pengembalian->id_peminjaman);
+            return response()->json(['message' => 'Peminjaman not found'], 404);
+        }
+    }
+    
+    
     
     
     private function processPengembalian(Peminjaman $peminjaman, $buktiPengembalian)
@@ -93,9 +163,6 @@ class PeminjamanController extends Controller
             Log::info('Processing Pengembalian for Peminjaman ID: ' . $peminjaman->id);
     
             if ($barang) {
-                // Update ketersediaan_barang in the Barang table to 'Tersedia'
-                $barang->update(['ketersediaan_barang' => 'Tersedia']);
-    
                 try {
                     // Log some additional information for debugging
                     Log::info('ID Pengembalian before creating: ' . $peminjaman->id);
@@ -128,6 +195,7 @@ class PeminjamanController extends Controller
             Log::info('Peminjaman is not in "dikembalikan" status. Skipping Pengembalian process for Peminjaman ID: ' . $peminjaman->id);
         }
     }
+    
     
     
     

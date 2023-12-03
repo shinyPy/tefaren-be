@@ -81,6 +81,7 @@ Route::middleware('JWTAuthentication')->group(function () {
 
         Route::get('/count-barangkategori', [CountController::class, 'countBarangByKategori']);
 
+        Route::put('/edit-pengembalian/{id}', [PeminjamanController::class, 'updatePengembalian']);
 
 
         Route::get('/pengguna', [PenggunaController::class, 'index']);

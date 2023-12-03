@@ -119,11 +119,7 @@ use App\Models\Barang;
                     <td style="padding-bottom: 3%;">:</td>
                     <td style="padding-bottom: 3%;">&nbsp;<?= $permohonan['pengguna']['nomorinduk_pengguna'] ?></td>
                 </tr>
-                <tr>
-                    <td style="padding-bottom: 3%;">Kelas</td>
-                    <td style="padding-bottom: 3%;">:</td>
-                    <td style="padding-bottom: 3%;">&nbsp;<?= $permohonan['kelas_pengguna'] ?></td>
-                </tr>
+            
                 <tr>
                     <td style="padding-bottom: 3%;">Keperluan Alat</td>
                     <td style="padding-bottom: 3%;">:</td>
