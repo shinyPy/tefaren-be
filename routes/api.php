@@ -89,7 +89,6 @@ Route::middleware('JWTAuthentication')->group(function () {
         Route::delete('/deletepengguna/{nomorinduk_pengguna}', [PenggunaController::class, 'destroy']);
 
         Route::put('/edit-permohonan/{id}', [PermohonanController::class, 'update']);
-        Route::get('/show-permohonan', [PermohonanController::class, 'index']);
         Route::delete('/delete-permohonan/{id}', [PermohonanController::class, 'destroy']);
 
     });
@@ -97,6 +96,7 @@ Route::middleware('JWTAuthentication')->group(function () {
 
     // Users
     Route::get('/barangShow', [BarangController::class, 'index']);
+    Route::get('/show-permohonan', [PermohonanController::class, 'index']);
 
     Route::put('/edit-peminjaman/{id}', [PeminjamanController::class, 'update']);
     Route::get('/show-peminjaman', [PeminjamanController::class, 'index']);
