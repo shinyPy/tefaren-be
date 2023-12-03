@@ -32,12 +32,12 @@ class Pengguna extends Model implements Authenticatable, JWTSubject
 
     public function jabatan()
     {
-        return $this->belongsTo(Jabatan::class, 'id_jabatan', 'id');
+        return $this->belongsTo(Jabatan::class, 'id_jabatan', 'id_jabatan');
     }
 
     public function jurusan()
     {
-        return $this->belongsTo(Jurusan::class, 'id_jurusan', 'id');
+        return $this->belongsTo(Jurusan::class, 'id_jurusan', 'id_jurusan');
     }
 
     /**

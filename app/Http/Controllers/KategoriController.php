@@ -28,18 +28,20 @@ class KategoriController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kategori' => 'required|',
+            'kategori' => 'required|max:20|unique:kategori_barang,kategori',
+        ], [
+            'kategori.unique' => 'Kategori sama dengan yang di tabel',
         ]);
-
+    
         $kategori = new Kategori([
             'kategori' => $request->get('kategori'),
         ]);
-
+    
         $kategori->save();
-
+    
         return response()->json(['kategori' => $kategori], 201);
     }
-
+    
     /**
      * Display the specified resource.
      *
@@ -57,6 +59,12 @@ class KategoriController extends Controller
         return response()->json(['kategori' => $kategori], 200);
     }
 
+    public function getKategoriValues()
+    {
+        $kategoriValues = Kategori::pluck('kategori');
+    
+        return response()->json($kategoriValues);
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -67,7 +75,7 @@ class KategoriController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'kategori' => 'required',
+            'kategori' => 'required|max:20',
         ]);
 
         $kategori = Kategori::find($id);
@@ -99,11 +107,5 @@ class KategoriController extends Controller
         $kategori->delete();
 
         return response()->json(['message' => 'Kategori di hapus'], 200);
-    }
-
-    public function list()
-    {
-        $kategori = Kategori::all();
-        return response()->json(['success' => true, 'list' => $kategori], 200);
     }
 }

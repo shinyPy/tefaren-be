@@ -1,3 +1,6 @@
+<?php
+use App\Models\Barang;
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,7 +45,6 @@
 
 <body>
 
-    <?php echo 'ini woi'; ?>
 
     <?php
     
@@ -110,18 +112,14 @@
                 <tr>
                     <td style="padding-bottom: 3%;">Nama</td>
                     <td style="padding-bottom: 3%;">:</td>
-                    <td style="padding-bottom: 3%;">&nbsp;<?= $permohonan['pengguna']['nama'] ?></td>
+                    <td style="padding-bottom: 3%;">&nbsp;<?= $permohonan['pengguna']['nama_pengguna'] ?></td>
                 </tr>
                 <tr>
                     <td style="padding-bottom: 3%;">NIS</td>
                     <td style="padding-bottom: 3%;">:</td>
-                    <td style="padding-bottom: 3%;">&nbsp;<?= $permohonan['pengguna']['nomor_induk_pengguna'] ?></td>
+                    <td style="padding-bottom: 3%;">&nbsp;<?= $permohonan['pengguna']['nomorinduk_pengguna'] ?></td>
                 </tr>
-                <tr>
-                    <td style="padding-bottom: 3%;">Kelas</td>
-                    <td style="padding-bottom: 3%;">:</td>
-                    <td style="padding-bottom: 3%;">&nbsp;<?= $permohonan['kelas_pengguna'] ?></td>
-                </tr>
+            
                 <tr>
                     <td style="padding-bottom: 3%;">Keperluan Alat</td>
                     <td style="padding-bottom: 3%;">:</td>
@@ -144,47 +142,39 @@
                     <td>Dengan memohon untuk dipinjamkan alat sebagai berikut :</td>
                 </tr>
             </table>
-            <table border="1"
-                style="border-collapse: collapse; width:100%; margin-top:0.8rem; margin-bottom:0.8rem">
+            <table border="1" style="border-collapse: collapse; width:100%; margin-top:0.8rem; margin-bottom:0.8rem">
                 <tr style="text-align: center">
                     <th style="">No</th>
                     <th style="">Nama Alat</th>
                     <th style="">Jumlah</th>
                     <th style="">Keadaan Saat Alat Dipinjam</th>
                 </tr>
-
-                <?php foreach($permohonan as $barang): ?>
+            
+                <?php $counter = 1; ?>
+                <?php foreach(json_decode($permohonan['details_barang'], true) as $item): ?>
+                <?php
+                
+                    // Fetch additional details for each item using the $item['id']
+                    $barang = Barang::find($item['id']); // Assuming you have a Barang model
+            
+                    // Check if the Barang exists
+                    if ($barang) {
+                        $nama_alat = $barang->nama_barang;
+                        $jumlah = 1; // Assuming you want to display the quantity as 1, modify as needed
+                        $keadaan_saat_dipinjam = $barang->status_barang; // Example, change it based on your needs
+                    } else {
+                        $nama_alat = 'Not Found';
+                        $jumlah = 'Not Found';
+                        $keadaan_saat_dipinjam = 'Not Found';
+                    }
+                ?>
                 <tr>
-                    <td style="padding: 1.5%"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td style="padding: 1.5%"><?= $counter++ ?></td>
+                    <td><?= $nama_alat ?></td>
+                    <td><?= $jumlah ?></td>
+                    <td><?= $keadaan_saat_dipinjam ?></td>
                 </tr>
-                <?php endforeach; ?>
-                {{-- <tr>
-                    <td style="padding: 1.5%"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td style="padding: 1.5%"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td style="padding: 1.5%"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td style="padding: 1.5%"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr> --}}
+            <?php endforeach; ?>
             </table>
             <span>
                 Dan bertanggung jawab atas alat tersebut diatas, bila terjadi sesuatu yang menyebabkan alat tersebut

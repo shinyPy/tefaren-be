@@ -9,9 +9,10 @@ class Jabatan extends Model
 {
     protected $table = 'jabatan';
     protected $fillable = ['jabatan'];
+    protected $primaryKey = 'id_jabatan';
 
     public function pengguna()
     {
-        return $this->hasMany(Pengguna::class, 'id_jabatan', 'id');
+        return $this->hasMany(Pengguna::class, 'id_jabatan', 'id_jabatan');
     }
 }

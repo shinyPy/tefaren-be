@@ -23,8 +23,11 @@ class JurusanController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+      
         $request->validate([
-            'jurusan' => 'required|max:20',
+            'jurusan' => 'required|max:20|unique:jurusan,jurusan', // Add 'unique' validation rule
+        ], [
+            'jurusan.unique' => 'Jurusan sama dengan yang di tabel',
         ]);
 
         $jurusan = Jurusan::create($request->all());
@@ -40,7 +43,9 @@ class JurusanController extends Controller
         }
 
         $request->validate([
-            'jurusan' => 'required|max:20',
+            'jurusan' => 'required|max:20|unique:jurusan,jurusan', // Add 'unique' validation rule
+        ], [
+            'jurusan.unique' => 'Jurusan sama dengan yang di tabel',
         ]);
 
         $jurusan->update($request->all());
