@@ -106,6 +106,7 @@ Route::middleware('JWTAuthentication')->group(function () {
 
     Route::post('/add-permohonan', [PermohonanController::class, 'store']);
     Route::get('/show-pengembalian', [PengembalianController::class, 'index']);
+    Route::delete('/delete-pengembalian/{id}', [PengembalianController::class, 'destroy']);
 
 
 });

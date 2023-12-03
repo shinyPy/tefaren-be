@@ -15,4 +15,17 @@ class PengembalianController extends Controller
         // Return the pengembalian data as JSON response
         return response()->json($pengembalians);
     }
+
+    public function destroy($id)
+    {
+        $pengembalian = pengembalian::find($id);
+
+        if (!$pengembalian) {
+            return response()->json(["message" => "Pengembalian tidak ditemukan"], 404);
+        }
+
+        $pengembalian->delete();
+
+        return response()->json(["message" => "Pengembalian telah dihapus"]);
+    }
 }
