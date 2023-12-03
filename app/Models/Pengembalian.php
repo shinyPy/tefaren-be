@@ -15,5 +15,6 @@ class Pengembalian extends Model
 {
     return $this->belongsTo(Peminjaman::class, 'id_peminjaman');
 }
+
 }
 // In the Pengembalian model

@@ -29,6 +29,7 @@ public function permohonan()
     return $this->belongsTo(Permohonan::class, 'id_permohonan');
 }
 
+
 public function barang()
 {
     return $this->belongsTo(Barang::class, 'id_barang');
