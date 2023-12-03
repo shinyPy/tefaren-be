@@ -65,7 +65,6 @@ Route::middleware('JWTAuthentication')->group(function () {
 
         Route::put('/barangUpdate/{id}', [BarangController::class, 'update']);
         Route::delete('/barangDelete/{id}', [BarangController::class, 'destroy']);
-        Route::get('/barangShow', [BarangController::class, 'index']);
         Route::post('/barangAdd', [BarangController::class, 'store']);
         Route::post('/upload-gambar-barang', [BarangController::class, 'uploadGambarBarang']);
 
@@ -88,17 +87,21 @@ Route::middleware('JWTAuthentication')->group(function () {
         Route::get('/pengguna/{id}', [PenggunaController::class, 'show']);
         Route::put('/editpengguna/{nomorinduk_pengguna}', [PenggunaController::class, 'update']);
         Route::delete('/deletepengguna/{nomorinduk_pengguna}', [PenggunaController::class, 'destroy']);
+
+        Route::put('/edit-permohonan/{id}', [PermohonanController::class, 'update']);
+        Route::get('/show-permohonan', [PermohonanController::class, 'index']);
+        Route::delete('/delete-permohonan/{id}', [PermohonanController::class, 'destroy']);
+
     });
 
 
     // Users
+    Route::get('/barangShow', [BarangController::class, 'index']);
+
     Route::put('/edit-peminjaman/{id}', [PeminjamanController::class, 'update']);
     Route::get('/show-peminjaman', [PeminjamanController::class, 'index']);
 
     Route::post('/add-permohonan', [PermohonanController::class, 'store']);
-    Route::put('/edit-permohonan/{id}', [PermohonanController::class, 'update']);
-    Route::delete('/delete-permohonan/{id}', [PermohonanController::class, 'destroy']);
 
 
-    Route::get('/show-permohonan', [PermohonanController::class, 'index']);
 });

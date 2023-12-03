@@ -35,7 +35,7 @@ class PermohonanController extends Controller
              return $pdf->stream('cetak_surat_permohonan.pdf');
          } else {
              // Return a response indicating that the document cannot be generated
-             return response()->json(['message' => 'Cannot generate document for non-terima status.'], 403);
+             return response()->json(['message' => 'Permohonan tidak diterima'], 403);
          }
      }
      
@@ -124,15 +124,14 @@ class PermohonanController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
     
-        // Check if the user has already submitted a permohonan with status_permohonan 'diajukan'
-        $existingPermohonan = Permohonan::where('id_pengguna', $request->user()->id)
-            ->where('status_permohonan', 'diajukan')
-            ->where('id', '!=', $id) // Exclude the current permohonan being updated
-            ->first();
+        // $existingPermohonan = Permohonan::where('id_pengguna', $request->user()->id)
+        //     ->where('status_permohonan', 'diajukan')
+        //     ->where('id', '!=', $id) // Exclude the current permohonan being updated
+        //     ->first();
     
-        if ($existingPermohonan && $request->input('status_permohonan') === 'diajukan') {
-            return response()->json(['message' => 'You have already submitted a permohonan with status "diajukan".'], 422);
-        }
+        // if ($existingPermohonan && $request->input('status_permohonan') === 'diajukan') {
+        //     return response()->json(['message' => 'You have already submitted a permohonan with status "diajukan".'], 422);
+        // }
     
         // Continue with the rest of the update logic
     
@@ -174,7 +173,7 @@ class PermohonanController extends Controller
             Log::info('Related Peminjaman deleted successfully for Permohonan ID: ' . $id);
         }
     
-        return response()->json(['message' => 'Permohonan updated successfully', 'data' => $permohonan]);
+        return response()->json(['message' => 'Permohonan sukses diupdate', 'data' => $permohonan]);
     }
     
 
@@ -242,7 +241,7 @@ class PermohonanController extends Controller
     
             return response()->json(['message' => 'Peminjaman records created successfully']);
         } else {
-            return response()->json(['message' => 'Invalid details_barang format'], 422);
+            return response()->json(['message' => 'format barang invalid '], 422);
         }
     }
     
