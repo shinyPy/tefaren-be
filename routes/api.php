@@ -13,6 +13,7 @@ use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PermohonanController;
 use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\PengembalianController;
 
 /*
 |--------------------------------------------------------------------------
@@ -91,7 +92,8 @@ Route::middleware('JWTAuthentication')->group(function () {
 
         Route::put('/edit-permohonan/{id}', [PermohonanController::class, 'update']);
         Route::delete('/delete-permohonan/{id}', [PermohonanController::class, 'destroy']);
-
+        Route::get('/show-pengembalian', [PengembalianController::class, 'index']);
+        
     });
 
 

@@ -247,9 +247,16 @@ class PermohonanController extends Controller
     
     
 
-    public function destroy(Permohonan $permohonan)
+    public function destroy($id)
     {
+        $permohonan = Permohonan::find($id);
+
+        if (!$permohonan) {
+            return response()->json(["message" => "Permohonan tidak ditemukan"], 404);
+        }
+
         $permohonan->delete();
-        return response()->json(['message' => 'Permohonan deleted successfully']);
+
+        return response()->json(["message" => "Permohonan telah dihapus"]);
     }
-}
+    }
