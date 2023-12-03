@@ -13,6 +13,6 @@ class PengembalianController extends Controller
         $pengembalians = Pengembalian::with('peminjaman')->get();
 
         // Return the pengembalian data as JSON response
-        return response()->json(['pengembalians' => $pengembalians]);
+        return response()->json($pengembalians);
     }
 }
