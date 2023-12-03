@@ -100,6 +100,7 @@ Route::middleware('JWTAuthentication')->group(function () {
     Route::get('/show-pengembalian', [PengembalianController::class, 'index']);
     Route::get('/barangShow', [BarangController::class, 'index']);
     Route::get('/show-permohonan', [PermohonanController::class, 'index']);
+    Route::delete('/delete-peminjaman/{idPeminjaman}', [PeminjamanController::class, 'deletePeminjaman']);
 
     Route::put('/edit-peminjaman/{id}', [PeminjamanController::class, 'update']);
     Route::get('/show-peminjaman', [PeminjamanController::class, 'index']);

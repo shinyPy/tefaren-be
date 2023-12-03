@@ -35,6 +35,31 @@ class PeminjamanController extends Controller
         }
     }
     
+    public function deletePeminjaman($idPeminjaman)
+{
+    // Find the Peminjaman
+    $peminjaman = Peminjaman::find($idPeminjaman);
+
+    // Check if the Peminjaman exists
+    if (!$peminjaman) {
+        return response()->json(["message" => "Peminjaman tidak ditemukan"], 404);
+    }
+
+    // Start a database transaction
+    try {
+        // Perform any additional actions before deleting if needed
+
+        // Delete the Peminjaman
+        $peminjaman->delete();
+
+        // Perform any additional actions after deleting if needed
+
+        return response()->json(["message" => "Peminjaman telah dihapus"]);
+    } catch (\Exception $e) {
+        // Handle the exception as needed
+        return response()->json(["message" => "Error occurred while deleting Peminjaman"], 500);
+    }
+}
     
 
     
