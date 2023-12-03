@@ -97,7 +97,6 @@ Route::middleware('JWTAuthentication')->group(function () {
 
 
     // Users
-    Route::get('/show-pengembalian', [PengembalianController::class, 'index']);
     Route::get('/barangShow', [BarangController::class, 'index']);
     Route::get('/show-permohonan', [PermohonanController::class, 'index']);
     Route::delete('/delete-peminjaman/{idPeminjaman}', [PeminjamanController::class, 'deletePeminjaman']);
@@ -106,6 +105,7 @@ Route::middleware('JWTAuthentication')->group(function () {
     Route::get('/show-peminjaman', [PeminjamanController::class, 'index']);
 
     Route::post('/add-permohonan', [PermohonanController::class, 'store']);
+    Route::get('/show-pengembalian', [PengembalianController::class, 'index']);
 
 
 });
