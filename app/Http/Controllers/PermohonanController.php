@@ -246,17 +246,32 @@ class PermohonanController extends Controller
     }
     
     
-
     public function destroy($id)
     {
+        // Find the Permohonan
         $permohonan = Permohonan::find($id);
-
+    
+        // Check if the Permohonan exists
         if (!$permohonan) {
             return response()->json(["message" => "Permohonan tidak ditemukan"], 404);
         }
-
-        $permohonan->delete();
-
-        return response()->json(["message" => "Permohonan telah dihapus"]);
+    
+        // Start a database transaction
+        try {
+            // Extract the 'id' values from details_barang
+            $barangIds = collect(json_decode($permohonan->details_barang))->pluck('id')->toArray();
+    
+            // Find and update the related Barang records
+            Barang::whereIn('id_barang', $barangIds)
+                ->update(['ketersediaan_barang' => 'Tersedia']);
+    
+            // Delete the Permohonan
+            $permohonan->delete();
+    
+            return response()->json(["message" => "Permohonan telah dihapus"]);
+        } catch (\Exception $e) {
+            // Handle the exception as needed
+            return response()->json(["message" => "Error occurred while deleting Permohonan"], 500);
+        }
     }
     }

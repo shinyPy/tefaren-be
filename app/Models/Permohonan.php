@@ -39,6 +39,10 @@ class Permohonan extends Model
     {
         return $this->hasMany(Barang::class, 'id_barang');
     }
+    public function barangs()
+    {
+        return $this->hasMany(Barang::class, 'id_barang');
+    }
 
     public function jabatan()
     {

@@ -92,12 +92,12 @@ Route::middleware('JWTAuthentication')->group(function () {
 
         Route::put('/edit-permohonan/{id}', [PermohonanController::class, 'update']);
         Route::delete('/delete-permohonan/{id}', [PermohonanController::class, 'destroy']);
-        Route::get('/show-pengembalian', [PengembalianController::class, 'index']);
         
     });
 
 
     // Users
+    Route::get('/show-pengembalian', [PengembalianController::class, 'index']);
     Route::get('/barangShow', [BarangController::class, 'index']);
     Route::get('/show-permohonan', [PermohonanController::class, 'index']);
 
