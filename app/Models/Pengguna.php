@@ -14,8 +14,7 @@ class Pengguna extends Model implements Authenticatable, JWTSubject
     use HasFactory, Notifiable, HasApiTokens;
 
     protected $table = 'pengguna';
-    protected $fillable = ['email', 'password', 'nomorinduk_pengguna'];
-    protected $primaryKey = 'id_pengguna';
+    protected $fillable = ['nomor_induk_pengguna', 'nama', 'tipe_pengguna', 'id_jabatan', 'id_jurusan', 'level_pengguna', 'email'];
 
     // Add the remember_token property to your model
     protected $remember_token;
@@ -28,6 +27,17 @@ class Pengguna extends Model implements Authenticatable, JWTSubject
     public function getAuthPassword()
     {
         return $this->password;
+    }
+
+
+    public function jabatan()
+    {
+        return $this->belongsTo(Jabatan::class, 'id_jabatan', 'id_jabatan');
+    }
+
+    public function jurusan()
+    {
+        return $this->belongsTo(Jurusan::class, 'id_jurusan', 'id_jurusan');
     }
 
     /**
@@ -47,7 +57,7 @@ class Pengguna extends Model implements Authenticatable, JWTSubject
      */
     public function getAuthIdentifierName()
     {
-        return 'id_pengguna'; // Replace with the actual column name for the user identifier
+        return 'id'; // Replace with the actual column name for the user identifier
     }
 
     /**
@@ -69,15 +79,7 @@ class Pengguna extends Model implements Authenticatable, JWTSubject
     {
         $this->remember_token = $value;
     }
-    public function jabatan()
-    {
-        return $this->belongsTo(Jabatan::class, 'id_jabatan', 'id_jabatan');
-    }
 
-    public function jurusan()
-    {
-        return $this->belongsTo(Jurusan::class, 'id_jurusan', 'id_jurusan');
-    }
     /**
      * Get the column name for the "remember me" token.
      *
@@ -88,15 +90,6 @@ class Pengguna extends Model implements Authenticatable, JWTSubject
         return 'remember_token';
     }
 
-    public function getJabatanAttribute()
-    {
-        return $this->id_jabatan ? Jabatan::find($this->id_jabatan)->only(['id_jabatan', 'jabatan']) : null;
-    }
-
-    public function getJurusanAttribute()
-    {
-        return $this->id_jurusan ? Jurusan::find($this->id_jurusan)->only(['id_jurusan', 'jurusan']) : null;
-    }
     /**
      * Implement methods for the JWTSubject interface
      */

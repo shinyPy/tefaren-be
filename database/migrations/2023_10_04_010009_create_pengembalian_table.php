@@ -12,19 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pengembalian', function (Blueprint $table) {
-            $table->id('id_pengembalian');
-            $table->unsignedBigInteger('id_peminjaman')->unique();
-            $table->foreign('id_peminjaman')->references('id_peminjaman')->on('peminjaman')->onDelete('cascade');
+            $table->id('id');
 
-            $table->string('nomorinduk_pengguna', 15);
-            $table->foreign('nomorinduk_pengguna')->references('nomorinduk_pengguna')->on('pengguna');
+            $table->bigInteger('id_peminjaman')->unsigned();
+            $table->foreign('id_peminjaman')->references('id_peminjaman')->on('peminjaman')->onDelete('cascade')->onUpdate('cascade');
 
-            $table->string('nama_pengguna', 100)->unique();
-            $table->string('nama_barang');
-            $table->string('kode_barang', 15)->index('kode_barang');
-            $table->enum('status_barang', ['baik','rusak']);
-            $table->date('tanggal_pengembalian');
-            $table->string('bukti_pengembalian', 100);
+            $table->enum('status_barang', ['baik', 'rusak']);
+            $table->text('bukti_pengembalian');
             $table->enum('status_pengembalian', ['dikembalikan', 'dicek']);
 
             $table->timestamps();

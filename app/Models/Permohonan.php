@@ -10,21 +10,52 @@ class Permohonan extends Model
     use HasFactory;
     protected $table = 'permohonan'; // Specify the table name explicitly
     protected $fillable = [
-        'kesetujuan_syarat',
-        'nomorinduk_pengguna',
-        'email',
-        'nama_pengguna',
-        'tipe_pengguna',
-        'id_jurusan',
+        'nomor_peminjaman',
+        'id_pengguna',
         'kelas_pengguna',
         'nomor_wa',
-        'id_jabatan',
-        'id_barang',
-        'nama_barang',
+        'details_barang',
         'alasan_peminjaman',
-        'jumlah_barang',
         'tanggal_peminjaman',
         'lama_peminjaman',
         'status_peminjaman',
     ];
+    protected $primaryKey = 'id';
+
+    public function pengguna()
+    {
+        return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id');
+    }
+
+    
+    
+
+    public function jurusan()
+    {
+        return $this->belongsTo(Jurusan::class, 'id_jurusan', 'id_jurusan');
+    }
+
+    public function barangDetails()
+    {
+        return $this->hasMany(Barang::class, 'id_barang');
+    }
+    public function barangs()
+    {
+        return $this->hasMany(Barang::class, 'id_barang');
+    }
+
+    public function jabatan()
+    {
+        return $this->belongsTo(Jabatan::class, 'id_jabatan', 'id_jabatan');
+    }
+
+    public function getBarangDetailsAttribute()
+    {
+        $details = json_decode($this->attributes['details_barang']);
+        $barangIds = collect($details)->pluck('id');
+        $barangs = Barang::whereIn('id_barang', $barangIds)->get();
+
+        return $barangs;
+    }
+
 }

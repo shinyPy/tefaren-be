@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Jabatan extends Model
 {
-    protected $table = 'jabatan'; // Specify the table name explicitly
-    protected $primaryKey = 'id_jabatan'; // Specify the custom primary key
+    protected $table = 'jabatan';
     protected $fillable = ['jabatan'];
+    protected $primaryKey = 'id_jabatan';
 
     public function pengguna()
     {
         return $this->hasMany(Pengguna::class, 'id_jabatan', 'id_jabatan');
     }
-    }
+}

@@ -29,6 +29,9 @@ class KategoriController extends Controller
     {
         $request->validate([
             'kategori' => 'required|max:20|unique:kategori_barang,kategori',
+        ], [
+            'kategori.unique' => 'Kategori sama dengan yang di tabel',
+
         ]);
     
         $kategori = new Kategori([
@@ -57,6 +60,12 @@ class KategoriController extends Controller
         return response()->json(['kategori' => $kategori], 200);
     }
 
+    public function getKategoriValues()
+    {
+        $kategoriValues = Kategori::pluck('kategori');
+    
+        return response()->json($kategoriValues);
+    }
     /**
      * Update the specified resource in storage.
      *

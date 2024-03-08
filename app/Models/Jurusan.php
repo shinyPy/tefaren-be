@@ -7,14 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Jurusan extends Model
 {
-    protected $table = 'jurusan'; // Specify the table name explicitly
-    protected $primaryKey = 'id_jurusan'; // Specify the custom primary key
+    protected $table = 'jurusan';
     protected $fillable = ['jurusan'];
+    protected $primaryKey = 'id_jurusan';
 
     use HasFactory;
     public function pengguna()
     {
-        return $this->hasMany(Pengguna::class, 'id_jabatan', 'id_jabatan');
+        return $this->hasMany(Pengguna::class, 'id_jurusan', 'id_jurusan');
     }
-
 }

@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('barang', function (Blueprint $table) {
             $table->id('id_barang');
             $table->string('kode_barang')->unique();
-            $table->unsignedBigInteger('id_kategori')->nullable(); // Use unsignedBigInteger for foreign keys
-            $table->string('nama_barang')->index();
-            $table->enum('ketersediaan_barang', ['Tersedia','Dipinjam','Pemeliharaan','Dihapuskan']);
+            $table->unsignedBigInteger('id_kategori');
+            $table->string('nama_barang');
+            $table->enum('ketersediaan_barang', ['Tersedia', 'Dipinjam', 'Pemeliharaan', 'Dihapuskan']);
             $table->enum('status_barang', ['baik', 'rusak']);
             $table->string('gambar_barang', 255);
 
-            $table->foreign('id_kategori')->references('id_kategori')->on('kategori_barang')->onDelete('cascade');
+            $table->foreign('id_kategori')->references('id_kategori')->on('kategori_barang')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
         });

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PermohonanController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PHPMailerController;
 
@@ -14,3 +15,4 @@ use App\Http\Controllers\PHPMailerController;
 |
 */
 
+Route::get('/surat-permohonan/{id}', [PermohonanController::class, 'cetakSurat']);
