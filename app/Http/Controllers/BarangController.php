@@ -42,6 +42,33 @@ class BarangController extends Controller
     }
 
 
+    public function card()
+{
+    $barangList = Barang::with(['kategori:id_kategori,kategori'])
+        ->select(['nama_barang', 'id_kategori', 'gambar_barang'])
+        ->get()
+        ->transform(function ($barang) {
+            $data = [
+                'nama_barang' => $barang->nama_barang,
+                'id_kategori' => $barang->id_kategori,
+                'gambar_barang' => $barang->gambar_barang,
+            ];
+
+            if ($barang->kategori !== null) {
+                $kategori = [
+                    'id_kategori' => data_get($barang->kategori, 'id_kategori'),
+                    'kategori' => data_get($barang->kategori, 'kategori'),
+                ];
+                $data['kategori'] = array_filter($kategori, fn ($value) => $value !== null);
+            } else {
+                $data['kategori'] = null;
+            }
+
+            return $data;
+        });
+
+    return response()->json($barangList);
+}
 
 
 
@@ -60,7 +87,7 @@ class BarangController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id_kategori' => 'required',
+            'kategori' => 'required|exists:kategori_barang,kategori',
             'kode_barang' => 'required|unique:barang,kode_barang|max:25',
             'nama_barang' => 'required|max:100',
             'ketersediaan_barang' => 'required|in:Tersedia,Dipinjam,Pemeliharaan,Dihapuskan',
@@ -72,9 +99,11 @@ class BarangController extends Controller
             return response()->json(["message" => "Invalid field", "errors" => $validator->errors()], 422);
         }
 
+        $kategori = $request->input('kategori');
+        $id_kategori = Kategori::where('kategori', $kategori)->value('id_kategori');
 
         $barang = new Barang([
-            'id_kategori' => $request->id_kategori,
+            'id_kategori' => $id_kategori,
             'kode_barang' => $request->kode_barang,
             'nama_barang' => $request->nama_barang,
             'ketersediaan_barang' => $request->ketersediaan_barang,
@@ -104,7 +133,7 @@ class BarangController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'id_kategori' => 'required',
+            'kategori' => 'required|exists:kategori_barang,kategori',
             'kode_barang' => 'required|unique:barang,kode_barang,' . $id . ',id_barang|max:25',
             'nama_barang' => 'required|max:100',
             'ketersediaan_barang' => 'required|in:Tersedia,Dipinjam,Pemeliharaan,Dihapuskan',
@@ -120,7 +149,10 @@ class BarangController extends Controller
             $barang->gambar_barang = $request->gambar_barang;
         }
 
-        $barang->id_kategori = $request->id_kategori;
+        $kategori = $request->input('kategori');
+        $id_kategori = Kategori::where('kategori', $kategori)->value('id_kategori');
+
+        $barang->id_kategori = $id_kategori;
         $barang->kode_barang = $request->kode_barang;
         $barang->nama_barang = $request->nama_barang;
         $barang->ketersediaan_barang = $request->ketersediaan_barang;

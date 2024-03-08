@@ -91,11 +91,41 @@ class PenggunaController extends Controller
     //     return response()->json(["message" => "Pengguna added successfully"], 201);
     // }
 
+    public function checkNomorInduk(Request $request)
+    {
+        $nomorinduk_pengguna = $request->input('nomorinduk_pengguna');
+
+        $user = Pengguna::where('nomorinduk_pengguna', $nomorinduk_pengguna)->first();
+
+        if ($user) {
+            // Email is already taken
+            return response()->json(['status' => 'unavailable']);
+        }
+
+        // Email is available
+        return response()->json(['status' => 'available']);
+    }
+
     public function checkEmail(Request $request)
     {
         $email = $request->input('email');
 
         $user = Pengguna::where('email', $email)->first();
+
+        if ($user) {
+            // Email is already taken
+            return response()->json(['status' => 'unavailable']);
+        }
+
+        // Email is available
+        return response()->json(['status' => 'available']);
+    }
+
+    public function checkNomorInduk(Request $request)
+    {
+        $nomorinduk_pengguna = $request->input('nomorinduk_pengguna');
+
+        $user = Pengguna::where('nomorinduk_pengguna', $nomorinduk_pengguna)->first();
 
         if ($user) {
             // Email is already taken

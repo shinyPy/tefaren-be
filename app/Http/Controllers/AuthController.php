@@ -86,28 +86,38 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email' => 'sometimes|required|email', // If 'email' is present, validate it
+            'nomorinduk_pengguna' => 'sometimes|required|string', // If 'nomorinduk_pengguna' is present, validate it
             'password' => 'required|string'
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json(['success' => false, 'error' => $validator->errors()]);
         }
-
-        $credentials = $request->only('email', 'password');
+    
+        if ($request->has('email')) {
+            $credentials = $request->only('email', 'password');
+            $field = 'email';
+        } else {
+            $credentials = $request->only('nomorinduk_pengguna', 'password');
+            $field = 'nomorinduk_pengguna';
+        }
+    
         $token = auth()->attempt($credentials);
-
+    
         if (!$token) {
-            return response()->json(['success' => false, 'message' => 'Email atau Password anda Salah!']);
+            return response()->json(['success' => false, 'message' => "$field or Password Anda Salah!"]);
         } else {
             $user = auth()->user()->with('jabatan', 'jurusan')->get();
         }
-
+    
         return response()->json([
-            "user" => $user, 'token' => $token
-
+            'success' => true,
+            'pengguna' => auth()->guard('api')->user(),
+            'accessToken' => $token
         ]);
     }
+    
 
 
     // Helper method to generate a token for Pengguna

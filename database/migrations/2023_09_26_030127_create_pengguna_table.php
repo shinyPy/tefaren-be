@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('pengguna', function (Blueprint $table) {
             $table->id('id'); // Use id() method to create auto-incrementing primary key
-            $table->string('nomor_induk_pengguna', 15)->unique();
-            $table->string('nama');
+            $table->string('nomorinduk_pengguna', 15)->unique();
+            $table->string('nama_pengguna');
             $table->enum('level_pengguna', ['user', 'admin']);
             $table->enum('tipe_pengguna', ['siswa', 'guru']);
             $table->unsignedBigInteger('id_jurusan')->nullable();
@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('password');
             $table->timestamps();
 
-            $table->foreign('id_jurusan')->references('id')->on('jurusan')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('id_jabatan')->references('id')->on('jabatan')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_jurusan')->references('id_jurusan')->on('jurusan')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_jabatan')->references('id_jabatan')->on('jabatan')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

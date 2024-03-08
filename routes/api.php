@@ -12,6 +12,8 @@ use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PermohonanController;
+use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\PengembalianController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,17 +28,29 @@ use App\Http\Controllers\PermohonanController;
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::get('/check-nomorinduk', [PenggunaController::class, 'checkNomorInduk']);
 
 Route::get('/check-email', [PenggunaController::class, 'checkEmail']);
+Route::get('/check-nomorinduk', [PenggunaController::class, 'checkNomorInduk']);
+Route::get('/barang-card', [BarangController::class, 'card']);
 
+Route::get('/kategori-values-ps', [JabatanValuesControllers::class, 'getKategoriValues']);
+
+
+Route::get('/kategori-values-ps', [JabatanValuesControllers::class, 'getKategoriValues']);
 
 Route::get('/jurusan-values', [EnumFetchControllers::class, 'getJurusanValues']);
 Route::get('/jabatan-values', [JabatanValuesControllers::class, 'getJabatanValues']);
+Route::get('/barang-card', [BarangController::class, 'card']);
+
 
 Route::middleware('JWTAuthentication')->group(function () {
     Route::get('/check-token', [AuthController::class, 'checkToken']);
-
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
     Route::middleware('AdminCheck')->group(function () {
+        Route::get('/kategori-values', [KategoriController::class, 'getKategoriValues']);
         Route::get('/list-kategori', [KategoriController::class, 'list']);
         Route::get('/get-kategori', [KategoriController::class, 'index']);
         Route::post('/add-kategori', [KategoriController::class, 'store']);
@@ -57,7 +71,6 @@ Route::middleware('JWTAuthentication')->group(function () {
 
         Route::put('/barangUpdate/{id}', [BarangController::class, 'update']);
         Route::delete('/barangDelete/{id}', [BarangController::class, 'destroy']);
-        Route::get('/barangShow', [BarangController::class, 'index']);
         Route::post('/barangAdd', [BarangController::class, 'store']);
         Route::post('/upload-gambar-barang', [BarangController::class, 'uploadGambarBarang']);
 
@@ -74,22 +87,31 @@ Route::middleware('JWTAuthentication')->group(function () {
 
         Route::get('/count-barangkategori', [CountController::class, 'countBarangByKategori']);
 
+        Route::put('/edit-pengembalian/{id}', [PeminjamanController::class, 'updatePengembalian']);
 
 
         Route::get('/pengguna', [PenggunaController::class, 'index']);
         Route::get('/pengguna/{id}', [PenggunaController::class, 'show']);
         Route::put('/editpengguna/{nomorinduk_pengguna}', [PenggunaController::class, 'update']);
         Route::delete('/deletepengguna/{nomorinduk_pengguna}', [PenggunaController::class, 'destroy']);
+
+        Route::put('/edit-permohonan/{id}', [PermohonanController::class, 'update']);
+        Route::delete('/delete-permohonan/{id}', [PermohonanController::class, 'destroy']);
+        
     });
 
 
     // Users
+    Route::get('/barangShow', [BarangController::class, 'index']);
+    Route::get('/show-permohonan', [PermohonanController::class, 'index']);
+    Route::delete('/delete-peminjaman/{idPeminjaman}', [PeminjamanController::class, 'deletePeminjaman']);
 
+    Route::put('/edit-peminjaman/{id}', [PeminjamanController::class, 'update']);
+    Route::get('/show-peminjaman', [PeminjamanController::class, 'index']);
 
     Route::post('/add-permohonan', [PermohonanController::class, 'store']);
+    Route::get('/show-pengembalian', [PengembalianController::class, 'index']);
+    Route::delete('/delete-pengembalian/{id}', [PengembalianController::class, 'destroy']);
 
-    Route::get('/permohonans', [PermohonanController::class, 'index']);
-    Route::get('/permohonans/{id}', [PermohonanController::class, 'show']);
-    Route::put('/permohonans/{id}', [PermohonanController::class, 'update']);
-    Route::delete('/permohonans/{id}', [PermohonanController::class, 'destroy']);
+
 });

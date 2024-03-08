@@ -20,9 +20,13 @@ You can just use Github Desktop for this
 ```
 php artisan jwt:secret
 ```
+* Migrate and seed the database.
+```
+php artisan migrate --seed
+```
 Then run this command
 ```
 php artisan serve
 ```
-And done
+
 

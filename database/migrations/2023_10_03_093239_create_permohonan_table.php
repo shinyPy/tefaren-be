@@ -13,25 +13,21 @@ return new class extends Migration
     {
         Schema::create('permohonan', function (Blueprint $table) {
             $table->id('id');
-            $table->enum('kesetujuan_syarat', ['setuju', 'tidak']);
             $table->bigInteger('id_pengguna')->unsigned();
-            $table->foreign('id_pengguna')->references('id')->on('pengguna')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('kelas_pengguna');
+            $table->foreign('id_pengguna')->references('id')->on('pengguna')->onUpdate('cascade');
             $table->string('nomor_wa');
 
-            $table->longText('list_barang');
+            $table->longText('details_barang');
             // $table->foreign('id_barang')->references('id')->on('barang')->onDelete('cascade')->onUpdate('cascade');
 
             $table->text('alasan_peminjaman');
-            $table->integer('jumlah_barang');
             $table->date('tanggal_peminjaman');
             $table->string('lama_peminjaman');
 
-            $table->string('nomor_peminjaman');
+            $table->string('nomor_peminjaman')->nullable();
 
-            $table->text('alasan')->nullable();
 
-            $table->enum('status_permohonan', ['tolak', 'terima', 'diajukan']);
+            $table->enum('status_permohonan', ['diajukan','tolak', 'terima']);
 
             $table->timestamps();
         });
