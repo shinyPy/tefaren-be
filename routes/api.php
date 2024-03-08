@@ -31,6 +31,11 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/check-nomorinduk', [PenggunaController::class, 'checkNomorInduk']);
 
 Route::get('/check-email', [PenggunaController::class, 'checkEmail']);
+Route::get('/check-nomorinduk', [PenggunaController::class, 'checkNomorInduk']);
+Route::get('/barang-card', [BarangController::class, 'card']);
+
+Route::get('/kategori-values-ps', [JabatanValuesControllers::class, 'getKategoriValues']);
+
 
 Route::get('/kategori-values-ps', [JabatanValuesControllers::class, 'getKategoriValues']);
 
